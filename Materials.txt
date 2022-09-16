@@ -1,0 +1,739 @@
+				Kotlin
+.....................................................................................
+
+What is Kotlin?
+    Kotlin is the programming language for JVM.
+
+JVM is runtime to run java applications.
+
+JVM is abstract computer which solves the problem of platform independant.
+
+One source and one Compiled code can be ported  on multiple platforms(os/hardware)
+
+What is java?
+  You mean java is programming language but not.
+Java is technology, technolgy means solves the pratical problems.
+
+Java technology means many things
+
+1.java programming language
+2.tools
+   compilers,debuggers,libs,apis....
+3.runtime - jre
+    -JDK
+
+Java Programming language offers the source code , compiler compiles the source code into object code(byte code).
+
+How java technology works? who controls java technology?
+
+JCP - java community process who standarize the java technology.
+
+All java versions and enchancments certified by JCP only...
+
+JCP classifies java into there major editions
+
+1.JAVA SE
+2.JAVA EE
+3.JAVA ME
+
+JEP - This is committe formed by oracle
+.....................................................................................
+			JSR 223 :Scripting for The Java TM Platform
+....................................................................................
+JSR 223 spec was released on June-10-2003
+
+Before this specification, only one programming language was there for JVM- Java Programming language.
+
+The spec aim is to introduce new languages for JVM - Poly glot languages for Java Platform.
+
+Based on this spec, the first language other than java pl, was created  for JVM-Groovy Programming langugage.
+.....................................................................................
+			    JSR 223 Poly glot language implementation
+
+
+        java pl    Groovy   Scala  Kotlin Clojure XX
+         -------------------------------------------
+			 |
+		      byte code
+                         |
+                        jvm
+
+
+
+The programs are developed using different styles.
+
+Programming styles:
+
+1.Object oriented
+2.Functional programming
+3.Procedural
+4.Rule based 
+etc....
+
+Any language follows any of one of the style or multi style(style).
+C is procedural language-single style language.
+c++ is object oriented language-single style language
+
+java was object oriented programming - single style
+
+Java is object oriented,functional style programming languge- multi style.
+
+Kotlin is object oriented, functional style programming language...
+
+
+Language is classified based on types(data types)
+.................................................
+
+1.strongly typed /static typed
+   The type of variable is decided during compile time.
+   int a=10;
+   a="hello"
+2.weak typed/dynamic typed
+  The type of variable is decided during runtime time.
+  var a =10
+  a ="hello"
+
+Kotlin is dynamic and strongly typed language.
+...................................................................................
+
+Programming language
+ =>GPL - General Purpose programming language
+     language used to build any type of apps
+ =>DSL -  Domain specific language
+     language used to build sepcific types of apps- html,css
+
+kotlin helps to build dsl code...
+
+DSL code is more declarative 
+ 
+  move left and move right - dsl code
+  find sqrt of 10 - dsl code
+  take 1 pile every day at morning 7 am  
+
+....................................................................................
+
+Programming methodlogy
+
+1.imperative programming
+    => any program there is two aspects
+        ->infra code
+        ->application logic
+    what is it? and how is it?
+
+2.declarative programming
+   focus only application logic
+   more readable
+   less boilerplate 
+   less code maintaince because less code
+  eg:
+    list.sort.filter.map.find.flaten
+
+Kotlin is more declarative programming  language.
+.....................................................................................
+	 "Kotlin helps to build more declarative, dsl , functional,object oriented          apps"
+
+
+Kotlin language is highly multi purpose programming language
+ - To build mobile apps -> multi platform mobile - android and ios apps.
+ - To build server side apps - microservices,RESTFull apis,dynamic web apps..
+ - To build platform native apps like c++...
+
+
+Learning Path:
+1.language fundamentals
+2.object oriented programming
+3.functional programming
+4.Exception handling
+5.Data structures
+6.Concurrency - Co-routines
+7.Async programming / Non Blocking apps
+8.How to build DSL
+
+Frameworks:
+1.web frameworks
+2.android
+3.Front End 
+....................................................................................
+				Language fundamentals
+.....................................................................................
+
+We are going to build console based Kotlin apps.
+
+Step to create Kotlin project.
+
+You can use any build system to create kotlin project
+Maven or Gradle.
+
+Every Kotlin program is saved With "FileName.kt".
+
+Unlike java kotlin programs need not be started with classes, you can start with main method(function).
+
+Kotlin Programming style:
+
+1.file based/script based
+2.class based - oo style
+
+How to declare functions in kotlin?
+
+ fun functionName(arg){
+   //function body...
+ }
+Every kotlin program begins with "main" function...
+
+in java : System.out.println()
+
+In Kotlin ; is optional
+
+HelloWorld.kt
+
+fun main(){
+    println("Hello Kotlin")
+}
+....................................................................................
+Language Fundamentals:
+
+1.Comments
+  Single line comment
+	//
+  Mutli line comment
+	/**
+        /**
+/**
+ * Every Kotlin program starts with main function.
+ * In Kotlin ; optional
+ */
+fun main(){
+    //which prints Hello message
+    println("Hello Kotlin")
+}
+..................................................................................
+Program means collection of instructions.
+
+instrcutions -(information + how the information is stored,processed,reterived)
+information is nothing but data.
+
+How to store data inside computer using programs?
+
+we need to store in memory address, in order to store we need handle
+
+variable: it is handle to store data.
+
+Data:
+ -simple data - atomic data - primtive data
+  eg:10 -
+any data can be broken into smaller unit.
+
+Numbers:
+   1.whole number
+       -binary,oct,hexa
+   2.decimal numbers
+      - float
+
+
+Abstract data types:
+   In the begining of programming only basic were used by languages like numbers,characters.
+   How to create our own type system- Type of data - Custom Types...
+
+struct,union - c implemnetation of abstract types
+
+Any abstract types are built on the top of built in types.
+ 
+ struct Employee = {numbers,characters}
+
+After some time new type creation syntax introduced "class"
+
+ class Employee {
+    numbers
+    characters
+ }
+...................................................................................
+
+Type - Data type
+ -primtives
+ -Complex type/Custom Type/Reference Type
+
+Variable
+ -Holder to hold any type 
+Literal
+ -Values(primitvies,Complex values)
+
+In kotlin types are dervied from java language.
+
+Java Primtive Types:
+1.numbers
+ -byte,short,int,long
+ -float,double
+2.char
+3.boolean
+
+In Kotlin you cant use primtives type directly... rather you have to use always "Complex type" - Reference Type
+
+In Kotlin , every thing is Object.
+
+variables are introduced using keywords
+
+-var
+-val
+
+variable declaration:
+ 
+ var | val | withoutanyKeyword variableName:Type = literal
+ 
+//types
+fun main() {
+    //int a=10
+    var b: Byte = 90 // size is 1 byte
+    var s: Short = 90 //2 bytes
+    var i: Int = 10 // 4 bytes
+    var lng: Long = 100000 // 8 bytes
+
+    println("Byte" + b)
+    println("Short " + s)
+    println("Int " + i)
+    println("Long " + lng)
+   
+
+}
+
+Type inference:
+ The type of variable is calculated based on the literal size.
+
+var speed =100
+ here the type of speed is calculated according to value
+ by default Int type is assigned.
+
+fun main() {
+    //type inference demo
+    var speed = 100
+    var lightSpeed = 100000000888
+    println("Speed" + speed)
+    println("Light Speed " + lightSpeed)
+    //decimals - double
+    var stockValue = 100.89 //double
+    //Float
+    var price: Float = 10.56f
+    var lat = 10.56f
+    //double
+    var isActive = true
+    val isEnabled: Boolean = false
+}
+.....................................................................................
+			 Static Typed language or Dynamic typed Language
+
+Static type:
+int a =10;
+a=90; // it is valid
+a=true //it is invalid - compile time error
+
+Dynamic typed
+in Js
+ let a =10;
+ a =100 //valid
+ a=true //valid
+In groovy
+ def a =10
+  a=10 //valid
+  a=true //valid
+
+
+Kotlin language is "strongly typed/Static typed" language, even though language looks like without type, but the type is infered
+fun main(){
+    var a =10
+    println("A " + a )
+    a=90
+    println("A " + a )
+    //a=true // invalid
+    println("A " + a )
+
+}
+............................................................................
+
+Strings :
+ String is collection of unicode characters
+ String Object 
+ Strings are declared  with "" , """
+
+Strings are concated with  + -> traditonal style
+
+Strings are represented with "String Templates" - String interploation.
+
+ "$variable" / "${}"
+
+fun main() {
+    //string declaration
+    var firstName: String = "Subramanian"
+    var lastName = "Murugan"
+
+//String concatnation
+    //var fullName = firstName + " " + lastName
+    var fullName = "$firstName $lastName"
+    println("Name is ${fullName}")
+}
+..................................................................................
+				Multi Line Strings
+...................................................................................
+
+java style
+//multi line strings -  java style
+fun main() {
+    val doc = "<html>" +
+            "<head>" +
+            "<title>Home</title>" +
+            "</head>" +
+            "<body>" +
+            "</body>" +
+            "</html>"
+    println(doc)
+}
+
+Kotlin style:
+   """
+//multi line strings -  java style
+fun main() {
+    val doc = "<html>" +
+            "<head>" +
+            "<title>Home</title>" +
+            "</head>" +
+            "<body>" +
+            "</body>" +
+            "</html>"
+    println(doc)
+    val title="google"
+    val newDoc = """
+       <html>
+          <head>
+                <title>${title} Home</title>
+          </head>
+        <body>
+            <h1>welcome to Kotlin</h1>
+        </body>
+    """.trim()
+    println(newDoc)
+}
+...................................................................................
+				Operators
+....................................................................................
+
+All operators supported by java  , supported by kotlin as well.
+
+Types of operators
+1.arithmetic operators
+2.conditional operators
+3.logical operators
+//operators
+fun main() {
+    //arithmetic operators
+    var a = 10
+    var b = 5
+    var c = a + b
+    println("Add $c")
+    c = a - b
+    println("Substract $c")
+    c = a * b
+    println("Multiplication $c")
+    c = a / b
+    println("Division $c")
+    //augmented operators
+    var counter = 1
+    counter += 1
+    println("Counter $counter")
+
+    //logical operators: works based on boolean expressions
+    var isValid = true
+    var isEnabled = false
+    var res = isValid && isEnabled
+    println("Result is $res")
+    //comparasional operators
+
+    var x = 100
+    var y = 200
+    //structural equals
+    var isEqual = x == y
+    println ("Is Equal $isEqual")
+    //reference equal
+    var str = "hello"
+    var strCp= str // here str and strCp points the same mememory address
+
+    var refEqual = str == strCp
+    println("Reference Equal $refEqual")
+
+    //comparsional operators
+    var isBig = a >b
+    println("Is Big $isBig")
+
+}
+.....................................................................................
+			 conditional work flow
+.....................................................................................
+conditions: - if
+
+In kotlin, "if" is an expression.
+it can return a value like functions.
+so in kotlin there is no need for tenary operator.
+(condtion ? truthy:falsy)- similar construct if expression provides
+
+fun main() {
+    var a = 10;
+    var b = 20
+    var max = a
+    //traditional style
+    if (a < b) {
+        max = b
+    }
+    println("Max $max")
+    //kotlin expression style
+    if (a < b) max = b //here we return max variable
+    println("Max $max")
+    //if ..else
+    //tradtional style
+    if (a > b) {
+        max = a
+    } else {
+        max = b
+    }
+    println("Max $max")
+    //expression style
+    //here initialize the a value to max variable if condition is true else initialize the b value
+    max = if (a < b) a else b
+    println("Max $max")
+
+    var isValid = false
+
+    var res = if (isValid) "Greet" else "GoodBye"
+    println(res)
+
+    //block of code -logic and return some value
+
+    //Note: we must have else block: which is mandatory
+    res = if (isValid) {
+        println("More code ")
+        var firstName = "Subramanian"
+        "welcome $firstName"
+    } else {
+        var lastName = "Murugan"
+        "how are you $lastName"
+    }
+    println(res)
+
+}
+.....................................................................................
+When expression:
+...............
+ When is similar to if expression, but when defines a condtions with multiple branches. which is similar to switch statement...
+
+
+fun main() {
+    //simple when expression
+    var x = 10
+    when (x) {
+        1 -> println("x is 1")
+        2 -> println("x is 2")
+        else -> println("No Match found")
+    }
+    //either this or that
+    var y = 10
+    when (y) {
+        0, 10 -> println("Y value is 0 or 1")
+        else -> println("other wise")
+    }
+    //range operator
+    var z = 10;
+    when (z) {
+        in 1..100 -> println("Z is part of this range")
+        !in 1..100 -> println("Z is out of Range")
+    }
+    //return result from the when expression
+    var isLoggedIn = false
+    var status = when (isLoggedIn) {
+        true -> "LoggedIn"
+        else -> "Not LoggedIn"
+    }
+    println(status)
+    //when without arg:
+    //if no arg is supplied, the branch conditions are simply boolean expression, and a branch
+    //executed when its condition is true.
+
+    var num = 3
+    var isEvenOrOdd = when {
+        num % 2 == 0 -> "Even"
+        num % 2 != 0 -> "Odd"
+        else -> "No Match Found"
+    }
+    println(isEvenOrOdd)
+
+
+}
+....................................................................................
+				Loops
+...................................................................................
+Loops:
+ for
+ range
+ while
+ do...while
+fun main() {
+    //range
+    for (count in 1..4) {
+        println("Count $count")
+    }
+    //reverse order
+    for (count in 5 downTo 1) {
+        println("Counter downwards ${count}")
+    }
+    //step by
+    for (count in 1..100 step 2) println(count)
+    for (count in 100 downTo 100 step 2) println(count)
+
+    //until
+    println("until")
+    for (count in 5 until 10) println(count)
+
+    //while loops
+    var x = 1
+    while (x <= 10) {
+        println("x $x")
+        x++
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
