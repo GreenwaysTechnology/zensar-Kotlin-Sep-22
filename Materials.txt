@@ -596,6 +596,242 @@ fun main() {
     }
 
 }
+...................................................................................
+				Functions
+..................................................................................
+
+What is function?
+  The term function is derived from the mathmetics.
+  The function represents unit of exectution.
+  The function is building block of computer system itself.
+    
+Types of function with respect to declaration and execution:
+
+1.passive functions
+2.active functions
+
+every program is running on runtime(jvm).
+
+JVM arch:
+ JVM is a process according to os.
+
+Every process has arch.
+Process has three segments
+ -Heap
+ -Stack
+ 
+Program Data/Method area :
+   The passive instructions are stored.
+  All functions are stored/initalized inside in this area
+  All static variables are initalized inside method area
+  All literals(values) are initalized inside constant pool inside method area
+
+All function declarations are stored inside method area only.
+.....................................................................................
+			 Runtime Representation of functions
+....................................................................................
+
+In programs runtime representation means, which should be accessed by cpu,memory should be allocated inside main memory.
+
+Every function must be allocated on RAM, so that it can be accessed by CPU.
+
+declaration
+fun main(){
+
+ println()
+
+}
+
+execution
+main() ----> we have to allocate memory on ram---|
+
+When function is called, the function is pushed into stack.
+
+stack is last in first out ds.
+
+The runtime starts allocating memory,which is called as "Stack Framework".
+
+Stack frame is runtime representation of any function at any time of time.
+
+After execution of stack frame it is removed from memory, so that other frames will start
+
+getValue()---frame is created---frame is running---frame is removed|
+sayHello()---frame is created---frame is running---frame is removed|
+.....................................................................................
+			  Kotlin functions
+....................................................................................
+
+Kotlin supports different functions
+
+1.normal functions
+2.infix function
+3.local function
+4.member function
+5.Tail Recursive function
+6.inline function
+7.suspend function
+8.operator function
+9.lambda functions
+
+
+1.normal function.
+ -how to declare
+ -how to invoke 
+ -args and parameters
+ -types and parameters
+ -return values and its types
+
+//every kotlin begins with main function
+fun main() {
+    //invoke function
+    sayHello()
+    add()
+}
+
+//normal function
+fun sayHello() {
+    //function body
+    println("Hello");
+    //simulating the current frame,takes much time
+    Thread.sleep(10000)
+}
+
+fun add() {
+    var a = 10
+    var b = 20
+    var c = a + b
+    println("The Result is $c")
+}
+....................................................................................
+			Function args and Parameters
+
+Args are place holder which hold values-variables
+Parameters are values which to be passed to the function
+
+Simple args and parameters:
+
+package  com.mycom.func.args
+
+fun main() {
+    //"Hello" is parameter
+    sayHello("Hello")
+    //call
+    add(1, 2)
+    //what if i dont pass parameters
+    add();
+}
+
+//message is arg
+fun sayHello(message: String) {
+    println(message)
+}
+
+//default args
+fun add(a: Int = 0, b: Int = 0) {
+    var c = a + b
+    println("The Result is $c")
+}
+.....................................................................................
+			More Parameters
+.....................................................................................
+
+fun main() {
+    format("Hello", true, false, ',')
+    //pass few parameters
+    format(str = "Welcome", wordSeparator = ';', normalizeCast = true)
+    //if no default args , that is treated as "mandatory parameter"
+    //format(wordSeparator = ';', normalizeCast = true)
+    format(str = "How are you ?")
+    //pass any type of value which is eq to Object o in java.
+    accept("Hello")
+    accept(100)
+    accept(89.45f)
+    accept(true)
+    accept(3434.89)
+
+}
+
+fun format(
+    str: String,
+    normalizeCast: Boolean = false,
+    upperCaseFirstLetter: Boolean = false,
+    wordSeparator: Char = ' '
+) {
+    println("$str $normalizeCast $upperCaseFirstLetter $wordSeparator")
+}
+
+//Object o  = new Employee()
+//Object o = 10(new Integer(10)
+
+//how to pass different types of values
+fun accept(myVar: Any) {
+  println("$myVar")
+}
+......
+
+
+var args: Variable args:
+ The function receives more parameters, but we dont know fixed no args
+
+fun main() {
+    logger("Employee.kt", "Warning", "save method is called")
+    logger("Employee.kt", "Error", "remove method throws Error", "402")
+}
+
+fun logger(vararg args: String) {
+   for (arg in args) println(arg)
+}
+
+fun format(
+    str: String,
+    normalizeCast: Boolean = false,
+    upperCaseFirstLetter: Boolean = false,
+    wordSeparator: Char = ' '
+) {
+    println("$str $normalizeCast $upperCaseFirstLetter $wordSeparator")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
