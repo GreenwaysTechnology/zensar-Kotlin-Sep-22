@@ -732,7 +732,7 @@ fun add(a: Int = 0, b: Int = 0) {
     println("The Result is $c")
 }
 .....................................................................................
-			More Parameters
+			More Parameters -Named Parameters
 .....................................................................................
 
 fun main() {
@@ -767,9 +767,68 @@ fun format(
 fun accept(myVar: Any) {
   println("$myVar")
 }
-......
+.....................................................................................
+			How to return value from the function
+.....................................................................................
+In kotlin function returns  any object, if function does not return any thing which is called "Unit".
+The "Unit" is type with only one value-Unit.
+package com.mycom.func.returns
 
 
+fun main() {
+    var message = sayHello()
+    println(message)
+    println(add(10, 10))
+    doStuff()
+    doStuffOne()
+}
+
+fun sayHello(): String {
+    return "Hello"
+}
+
+fun add(a: Int = 0, b: Int = 0): Int {
+    return a + b
+}
+
+//not return any value
+fun doStuff():Unit {
+    println("do Stuff")
+   // return ; return statement is optional
+}
+
+fun doStuffOne() {
+    println("do Stuff")
+    // return ; return statement is optional
+}
+.....................................................................................
+			Single-Expression Function
+....................................................................................
+When a function returns a single expression,the curly braces can be omitted and the body is specified after = symbol.
+
+package com.mycom.func.returns
+
+
+fun main() {
+    println(sum(10, 10))
+    println(getValue())
+    println(getStock(100))
+}
+
+//normal return syntax
+//fun sum(a: Int = 0, b: Int = 0): Int {
+//    return a * b
+//}
+//function expression syntax:
+//here we can omit curly braces and return statement
+//fun sum(a: Int = 0, b: Int = 0): Int = a * b
+//even we can omit return type
+fun sum(a: Int = 0, b: Int = 0) = a * b
+
+//function returns literals
+fun getValue() = 100
+//function returns single args
+fun getStock(value: Int = 0) = value
 var args: Variable args:
  The function receives more parameters, but we dont know fixed no args
 
@@ -790,6 +849,277 @@ fun format(
 ) {
     println("$str $normalizeCast $upperCaseFirstLetter $wordSeparator")
 }
+
+..........................
+
+..................................................................................	
+				null
+.................................................................................
+
+What is null?
+ Null itself is value even it is called "Object".
+ Object means memory which has data.
+
+https://en.wikipedia.org/wiki/Null_pointer
+
+class Order{
+//instance reference variable  ----part of heap defintion
+   Product p = new Product()
+}
+class Product {
+
+}
+ 
+static void createInstance(){ 
+  //local reference variable
+  Order o = new Order()
+}
+
+public static void main(){ ---------->stack--frame -----
+
+   createInstance()
+}
+.....................................................................................
+			How to handle null
+
+Null  reference is unavoidable in any object oriented systems, handling null is more challange.
+How to handle null very safely?
+ Kotlin like languages handles null very effieciently wihout crashing the system.
+ Kotlin handles null positively, if there is null, we can give alternate values.
+
+In java , the methods,properties access are verified during compile time, during runtime only , invocations are verfied.
+
+package com.mycom.nullrefdemo;
+
+public class NullDemo {
+    public static void main(String[] args) {
+
+        //during compile time the compiler checks always left side
+        //during runtime  the runtime checks always right side
+        String str = null;
+        System.out.println(str.length());
+      //  System.out.println(str.doStuff());
+    }
+}
+
+In Kotlin "null" is verfied during compile itself , so that your code will be more safer during development.
+
+App never crash because of null errors in runtime.
+
+ 
+In java null is handled
+
+A a=null;
+if(a!=null){
+  //do this
+}else{
+  //dont do
+}
+
+Kotlin and Null:
+1.kotlin variables never allows null by default 
+
+fun main(){
+    var firstName:String = null
+}
+This code cause compile time error
+ Null can not be a value of a non-null type String
+
+fun main(){
+    //var firstName:String = null
+    var firstName:String = ""
+    firstName =null
+}
+This code also causes error.
+
+Some times we cant avoid having null values. How to declare null in Kotlin?
+What if i want nullable value?
+
+To declare  nullable variable.
+  
+ var variableName:Type? = null
+ 
+package com.mycom.nullrefdemo
+
+
+fun main() {
+    //var firstName:String = null
+//    var firstName:String = ""
+//    firstName =null
+    //Nullable: ability to hold null value
+    var firstName: String? = null
+    println(firstName)
+}
+
+.....................................................................................
+				What if i access any property on null
+.....................................................................................
+
+package com.mycom.nullrefdemo
+
+fun main() {
+    var firstName: String? = null
+    //handling null
+    //way1 : java style using if
+    if (firstName != null) {
+        println("FirstName size ${firstName.length}")
+    } else {
+        println("FirstName variable having null value")
+    }
+    //way 2 : solution 2 : using safe navigation operator
+    println(firstName?.length)
+    println("Hello")
+
+    //way 3: solution 3: : using Elvis Operator :  if there is null, if you access property
+    //on null, it gives you null as output, if you want some meaningfull default values we can use
+    //Elvis operator
+
+    var length = firstName?.length ?: 0
+    println("String length is $length")
+
+    //way 4: solution 4: For some other reason, if you want "Runtime Exception", how to throw runtime
+    //Exception
+    println("Boom! ${firstName!!.length}")
+
+}
+
+.....................................................................................
+				Functions and Nullable value
+.....................................................................................
+fun main() {
+    //you have to pass value
+    sayHello("Subramanian")
+    sayHello(null)
+    sayHello();
+
+
+}
+
+fun sayHello(firstName: String?="") {
+    println("Hello ${firstName ?: ""} and its length is ${firstName?.length ?: 0}")
+}
+.....................................................................................
+			  Functional Programming
+....................................................................................
+
+What is functional Programming?
+   Functional programming is one the programming style for building apps.
+
+Functional programming principles and patterns implemented from the mathematics called "Lambda Calculus " -λ-calculus
+
+Lambda calculus (also written as λ-calculus) is a formal system in mathematical logic for expressing "computation based on function abstraction and application using variable binding and substitution"
+
+It is a universal model of computation that can be used to simulate any Turing machine.
+
+It was introduced by the mathematician Alonzo Church in the 1930s as part of his research into the foundations of mathematics.
+
+Turning machine is abstract computer which talks about how to "mutate state" / "manipulate state"
+
+Draw back of Turning machine of Alan Turning:
+............................................
+
+1.State Mutation -  mutable state
+  
+
+According to lambda calculs what is function?
+
+    "unit of computation" -  having expressions and variables and its values
+
+ f= {
+   c= a + b
+  }
+
+Lambda calculs offered new idea for state mutation
+  "Pure function"
+
+pure function:
+
+A.if function receives input, it never modifes the input parameters rather it returns same.
+  
+    fun myFun(a:Int){
+       return a
+    }
+    myFun(10)
+
+if function does not modify the input parameter that function is not pure rather impure function.
+ 
+    fun myFun(a:Int){
+          return a*10
+    }
+    myFun(10)
+Side Effect:
+   if function changes input parameter
+   if function does some io operation
+   if function changes the local variable with input parameter
+
+if function does the above things, the function is causing side effects- That is called impure function.
+
+B.if function receives input what if i want to modify the input,"dont override the orignial Memory Address", rather copy that value into new memory address and keep the updated value - "Immutable" 
+
+https://www.youtube.com/watch?v=eis11j_iGMs
+https://www.youtube.com/watch?v=3VQ382QG-y4
+.....................................................................................
+		
+Lambda calculs and Computer programming language:
+.................................................
+
+1.Lisp
+2.CommonLisp
+3.Lisp For JVM -Clojure 
+4.Haskell
+5.javascript 
+6.JVM
+   Groovy,scala,kotlin,java 8 some what,clojure.....
+
+
+Principles of functional Programming
+
+1.Functions are first class citizines
+   Higher order functions
+2.Referential transparency
+3.pure function
+    -side effects,immutablity
+4.No Loops  rather recurrsive functions
+
+.....................................................................................
+				purely functional 
+				    and 
+                                functional style
+
+
+purely functional programming language means, the language implements 100 % all fp principles 
+functional style programming language, only implements partial principles.
+
+Kotlin is functional style programming language,object oriented programming principles
+.....................................................................................
+
+Kotlin functional Implementation:
+
+1.Function is first class citizens
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
