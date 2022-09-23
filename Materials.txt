@@ -1097,6 +1097,224 @@ Kotlin functional Implementation:
 
 1.Function is first class citizens
 
+What is first class citizen (special):
+ 
+  -functions are passed around (in ,out)
+
+This means the language supports passing function as arguments to other function,
+returning them as the values from functions , and assigning them to variables or storing them in data structure.
+
+"functions are literal,means values like int ,double string"
+
+ var a =10;
+  here a is variable
+  here 10 is value(literal)
+
+var myJob = fun doStuff(){}
+
+ Kotlin functions are first class, which means that they can be stored in variables,passed inside ds,passed as params, return them from other functions.
+
+Higher Order function:
+  
+   First class functions are ncessity for the functional programming style, in which the use of higher order functions is a standard practice.
+
+In Mathmatics and computer science, a higher order function is a function that does the following things
+
+1.takes one or more function as arg
+2.returns a function as its result.
+
+can i say this fun is higher order fun?
+
+fun map(){
+
+}
+No, because it does not follow the thumb rule of higher order function.
+....................................................................................
+		  Since Kotlin static typed language, we need to tell the 
+			  "type of Itself"
+
+
+fun map(FunctionType){
+
+}
+In kotlin , every thing is object, FunctionType itself is object behind the scene.
+....................................................................................
+				Kotlin Function Types
+..................................................................................
+
+1.(T)->T 
+  eg:
+   (Int)->Int
+   (Int)->String
+2.(T1,T2)->T3
+   (Int,Int)->Int
+   (Int,Int)->String
+3.(T)->Unit
+   (Int)->Unit
+   ()->Unit
+
+fun map((T)->T){
+
+}
+Rules:
+1.All function types have a parenthesized types list and return type.  
+  (A,B)->C
+2.Function type can optionally have have an additional "Receiver" type,
+  Which is represented a dot in the notation.
+
+  "ReceiverObject".(B,C)->D
+    
+    A.(B,C)->D
+   
+  A- Receiver Object
+  B,C args
+  D- Return type
+3.Incase of async programming, in order to represent "callbacks/listener" functions    are represented as suspend function
+
+  suspend (A,B)->D
+  suspend A.(B,C)->D
+   
+EG:
+  (a:Int,b:Int)->Shape
+
+ Here no variables are nullable, what if i want nullable representation...
+
+ ((A,B)->c)?
+ (A.(B,C)->D)?
+
+
+
+Function declaration with variable
+....................................
+
+ action:()->Unit
+
+ action is just variable, 
+ ()->Unit - function type
+
+ a:Int ====== action:()->Unit
+
+
+Function literals:
+
+ In functional programming "functions are values(literals)/expressions", can be stored into a variable.
+  Since function stored inside variable, that variable can be used to invoke that function.
+ 
+  var sayHello: () -> Unit = fun() {
+        println("Hello")
+    }
+    sayHello()
+
+Here 
+ sayHello is just variable only
+ () -> Unit is type of that function.
+
+sayHello() - function reference.
+
+   fun() {
+        println("Hello")
+    }
+Here no function name so that it is called "anonyoumus functions (function without name)" 
+
+package com.mycom.functionalprogramming.hof
+
+
+fun main() {
+    //a is variable
+    //10 is value(literal)
+    var a: Int = 10 // explicit type is declared
+    println("a $a")
+    var b = 20 // Type inference is enabled
+
+    //function declaration with Explicit type
+    var sayHello: () -> Unit = fun() {
+        println("Hello")
+    }
+    sayHello();
+
+    //function declaration with "type inference"
+    var sayHai = fun() {
+        println("Hai")
+    }
+    sayHai()
+    //An anonymous function is not allowed to specify default values for its parameters
+//    var add: (Int, Int) -> Int = fun(a: Int=0, b: Int=0): Int {
+//        return a + b
+//    }
+    var add: (Int, Int) -> Int = fun(a: Int, b: Int): Int {
+        return a + b
+    }
+    println(add(10, 10));
+
+    var substract = fun(a: Int, b: Int): Int {
+        return a - b
+    }
+    println(substract(10, 4));
+
+    //what if the parameter is nullable
+    var accept: ((String) -> String)? = fun(message: String): String {
+        return "Hello $message";
+    }
+    //if function literal is called with nullable, you cant call directly
+    //Surrondwith Null Check
+    if (accept != null) {
+        println(accept("Subramanian"))
+    }
+    //Every function type is Object, In kotlin every thing is object.
+
+    //there is method called invoke, can be used to invoke any anonymous functions
+    println(substract.invoke(10, 23));
+    println(accept?.invoke("Geetha Subramanian"))
+
+    //With Type inference
+    var display = fun(message: String?): String? {
+        return "Hello $message";
+    }
+    println(display?.invoke("Geetha Subramanian"))
+
+}
+....
+
+Higher Order function: function as parameter:
+
+package com.mycom.functionalprogramming.hof
+
+fun add(a: Int, b: Int) {
+    println("$a $b")
+}
+
+//Higher order function.
+fun sayGreet(action: () -> Unit) {
+    action()
+    //  action.invoke()
+}
+
+fun adder(action: (Int, Int) -> Unit) {
+    action(10, 10)//passing value
+}
+
+fun main() {
+    //passing function as parameter
+    var x = 10;
+    var y = 20
+    add(x, y)//pass variable
+    add(10, 10) //pass value- literal
+    var sayHello: () -> Unit = fun() {
+        println("Hello")
+    }
+    //function as parameter
+    sayGreet(sayHello)
+    //function itself passed directly.
+    sayGreet(fun() {
+        println("Hai")
+    })
+    adder(fun(a: Int, b: Int): Unit {
+        var r = a + b
+        println("Result of Adder ${r}")
+    })
+}
+
+
 
 
 
