@@ -1313,11 +1313,579 @@ fun main() {
         println("Result of Adder ${r}")
     })
 }
+.....................................................................................
+
+More Complex Example:
+package com.mycom.functionalprogramming.hof
+
+//how to pass more fun parameters
+fun login(userName: String = "", password: String = "", resolve: (String) -> Unit, reject: (String) -> Unit) {
+    //biz logic
+    if (userName == "admin" && password == "admin")
+        resolve("Login Success")
+    else
+        reject("Login failed")
+}
+
+fun main() {
+    login(userName = "admin", password = "admin",
+        fun(status) {
+            println(status)
+        },
+        fun(err) {
+            println(err)
+        })
+    login(userName = "foo", password = "bar",
+        fun(status) {
+            println(status)
+        },
+        fun(err) {
+            println(err)
+        })
+}
+.....................................................................................
+			Higher order functions and Lambdas
+...................................................................................
+
+What is Lambda?
+  Lambda terminalogy is derived the Lambda calculs.
+
+Lambdas are function literals only , can be assigned to a variable, passed around(in and around).
+
+How to declare Lambda Expression?
+
+val | var variableName:FunctionType = {arg -> functionBody }
+
+Rules:
+1.A lambda expression is always surrounded by curly braces.
+2.Parameter declartions in the full synatactic form go inside curly braces and have optional type annotations.
+3.The body of the function will go after ->
+
+4.The infered return type is not "Unit" by default , the last line (possibly) expression inside the lambda body is treated as the return value.
+
+5.Lambdas can be passed to another function as parameter or Lambdas can be passed to another Lambdas as parameter.
+
+package com.mycom.functionalprogramming.lambdas
+
+//normal function
+fun add(a: Int = 1, b: Int = 1): Int {
+    return a + b
+}
+
+//function expression:if function has only one line of returned code.
+fun addExpression(a: Int = 1, b: Int = 1) = a + b
+
+//function as literal : function can be assigned into a variable
+var addFun = fun(a: Int, b: Int): Int {
+    return a + b
+}
+
+//function as lambda : function can be assigned into a variable
+var addLambda = { a: Int, b: Int ->
+    //body of the fun expression
+    //return a + b //return keyword is not used
+    a + b
+}
+
+fun main() {
+    println(add(10, 10))
+    println(addExpression(10, 10))
+    println(addFun(10, 10))
+    println(addLambda(10,10))
+}
+...........................**********................................................
+				Lambda complex syntaxs
+
+
+package com.mycom.functionalprogramming.lambdas
+
+//function as lambda : function can be assigned into a variable
+var add = { a: Int, b: Int ->
+    a + b
+}
+
+//mulitple line of code
+//with type
+var login: (String, String) -> String = { userName: String, password: String ->
+    println("Login function is called")
+    println("$userName $password")
+    if (userName == "admin" && password == "admin")
+        "Login Success"
+    else
+        "Login Failed"
+
+}
+
+//without type: Type inference:Highly recommend
+//var auth = { userName: String, password: String ->
+//    println("Login function is called")
+//    println("$userName $password")
+//    if (userName == "admin" && password == "admin")
+//        "Login Success"
+//    else
+//        "Login Failed"
+//
+//}
+var auth = { userName: String, password: String ->
+    println("Login function is called")
+    println("$userName $password")
+    if (userName == "admin" && password == "admin")
+        "Login Success"
+    else
+        "Login Failed"
+
+}
+
+//lambdas has no parameter and no return value
+//var myFun: () -> Unit = {
+//    println("Hello")
+//    println("How are you?")
+//    println("What about you")
+//}
+var myFun = {
+    println("Hello")
+    println("How are you?")
+    println("What about you")
+}
+
+/////////////if lambda has single arg and parameter
+var sayMyName = { name: String ->
+    name.uppercase()
+}
+
+
+fun main() {
+    println(add(10, 10))
+    println(login("admin", "admin"))
+    myFun()
+    println(sayMyName("Subramnaian"))
+
+}
+.....................................................................................
+				it -Variable
+
+"it" is implcit variable can be used in lambda to replace single explicit arg functions
+
+package com.mycom.functionalprogramming.lambdas
+
+
+/////////////if lambda has single arg and parameter
+var sayMyName = { name: String ->
+    name.uppercase()
+}
+
+//name variable can be replaced with "it" variable
+var sayYourName: (String) -> String = { it.uppercase() }
+
+fun main() {
+    println(sayYourName("Subramnaian"))
+}
+...................................................................................
+			Higher order function and Lambdas
+...................................................................................
+
+How to pass lambda as parameter to another function or lambda?
+
+package com.mycom.functionalprogramming.lambdas
+
+fun delay(action: () -> Unit) {
+    action()
+}
+
+fun main() {
+
+    //passing regular function as parameter
+    delay(fun() {
+        println("delay")
+    })
+    //passing lambda
+    var task = {
+        println("Task")
+    }
+    delay(task)
+    //passing lambda as literal directly
+    delay({
+        println("Task is more")
+    })
+
+}
+.....................................................................................					DSL - Domain Specific Language
+.....................................................................................
+
+More readable code english like statement.
+Kotlin supports building dsl syntax.
+
+Basic DSL syntax:
+
+When pass lambda as parameter to the function, we can ommit ()
+
+   //lambda skips ()
+    delay {
+        println("DSL task")
+    }
+...................................................................................
+		If higher order function takes more parameters(mixed)
+			
+fun compute(no: Int = 0, action: () -> Unit) {
+    println("no ${no}")
+    action()
+}
+fun main() {
+    compute(10, { println("Compute") })
+}
+
+DSL Syntax for more parameters:
+...............................
+When you pass lambda as second parameter, the first parameter can be enclosed with "()" and second parameter(lambda) can passed directly.
+fun compute(no: Int = 0, action: () -> Unit) {
+    println("no ${no}")
+    action()
+}
+
+fun filterBy(order: String = "asc", name: String = "name", no: Int = 0, action: () -> Unit) {
+    println("Order ${order} Name ${name} no ${no} ")
+    action()
+}
+fun main() {
+    compute(10, { println("Compute") })
+//dsl syntax
+    compute(10) { println("Compute WITH DSL") }
+
+   filterBy(order = "desc", name = "John", no = 100) {
+        println("Filter is done")
+    }
+
+}
+   
+Most of the Kotlin functions powered with "Lambda" -Higher order
+
+//built in function called
+    thread(name = "My Sweet Thread", start = true) {
+        println(" Current Thread ${Thread.currentThread().name}")
+    }
+    thread(name = "Product Thread", start = true) {
+        Thread.sleep(1000)
+        println(" Current Thread ${Thread.currentThread().name}")
+    }
+....................................................................................
+			 Best Practices Designing With Lambda
+
+We can lambda at places of function calls,but it does not give you DSL syntax.
+
+ filterBy(action = { println("filter is over ") }, name = "Product")
+
+Recommendation is always pass lambda as last parameter.
+.....................................................................................			    It variable in the Higher order function
+....................................................................................
+
+package com.mycom.functionalprogramming.lambdas
+
+
+fun doubleIt(n: Int = 0, action: (Int) -> Unit) {
+    //double the input and send the result via lambda
+    action(n * 2)
+}
+
+fun add(a: Int = 0, b: Int = 0, c: Int = 0, action: (Int) -> Unit) {
+    action(a + b + c)
+}
+
+//return values from the lambda
+fun multiply(a: Int = 0, b: Int = 0, action: (Int) -> Int) {
+    var result = action(a * b)
+    println("Returned Result from the Calleer $result")
+}
+
+fun main() {
+    doubleIt(10) { res -> println("Result is $res") }
+    doubleIt(10) { println("Result is $it") }
+    add(a = 10, b = 30, c = 80) { println("Result is $it") }
+
+    //return value from the lambda, no return statement , last line of lambda is return
+    multiply(a = 10, b = 10) { res ->
+        println("Multiply function")
+        res
+    }
+    //refactor the code with it
+    multiply(a = 10, b = 10) {
+        println("Multiply function")
+        it
+    }
+
+}
+....................................................................................
+			How to pass more no of lambda parameters
+....................................................................................
+
+package com.mycom.functionalprogramming.lambdas
+
+fun login(
+    userName: String = "",
+    password: String = "",
+    resolve: (String) -> Unit,
+    reject: (String) -> Unit
+) {
+    if (userName == "admin") resolve("Login Success") else reject("Login failed")
+}
+
+
+fun main() {
+    login(userName = "admin",
+        password = "admin",
+        resolve = { println(it) },
+        reject = { println(it) })
+}
+.....................................................................................
+		What if The lambda is taking More parameters
+
+fun doCompute(a: Int = 0, b: Int = 0, action: (Int, Int) -> Unit) {
+    action(a, b)
+}
+
+fun main() {
+    login(userName = "admin",
+        password = "admin",
+        resolve = { println(it) },
+        reject = { println(it) })
+
+  
+    doCompute(a = 10, b = 20) { a, b -> println("$a $b") }
+    //how to skip parameters
+    doCompute() { a, b -> println("$a $b") }
+    //kotlin automatically skips parameters and initialized with default values
+    doCompute { a, b -> println("$a $b") }
+}
+....................................................................................
+			 Can we skip lambda args
+.....................................................................................
+
+Yes!
+We can use "_" notation instead of its name
+
+
+ package com.mycom.functionalprogramming.lambdas
+
+fun doCompute(a: Int = 0, b: Int = 0, action: (Int, Int) -> Unit) {
+    action(a, b)
+}
+
+
+fun main() {
+      //I need here only b value not a value.we can use _ notation
+    doCompute { _, b -> println("$b") }
+    doCompute(b = 10) { _, b -> println("$b") }
+
+
+}
+.....................................................................................
+		How to pass a lambda as parameter to another lambda
+...................................................................................
+var async = { action: (String) -> Unit ->
+    action("async function")
+}
+
+fun main() {
+  async { println(it) }
+}
+
+More parameters with Lambda:
+
+package com.mycom.functionalprogramming.lambdas
+
+var async = { payload: String, action: (String) -> Unit ->
+    action(payload)
+}
+
+fun main() {
+    async("My async task is running...") { println(it) }
+}
+.....................................................................................
+	   Object oriented Programming and implementation
+.....................................................................................
+
+What is Object orientation?
+   "The Object orientation is way/style  of building applications"
+
+if take any Program, there are only two things
+    -Data - information
+    -How to operate on the data
+
+Data represents the problem domain- Banking
+
+Program = { Data  +  actions/operations }
+
+Before OO:
+  data   |  operations are completly isloated  = traditional programming styles - procedural style
+
+ if many operations operate on data, which lead inconsistency,data corrpution/loss, 
+ data duplication.....
+
+1970's white paper was published regarding, How to orgainize the data based problem(domain)-real world.
+
+We need to map the data according to realworld problems what we solve using machines/programs.
+
+Birth of Abstract Data Type of theory:
+......................................
+
+  To create new data types based on core types.
+
+core types:
+    numbers, characters
+    numbers- very very core.
+
+Language types
+    int,float,char -primitive types
+
+NewType = { int,float,int,char,char }
+  |
+Abstract Data Type
+
+Implementation of Abstract data type Theroy:
+
+In c language , abstract data type theroy were implemented via notations 
+
+1.struct
+2.union
+   These notation grouped data into a logical unit.
+3.class
+    The class word dervied from "clause" 
+   Grouping of things(data).
+
+Based on this notatation, c language introduced a concept called "c with classes"
+that later led into a new programming style and implementation 
+    -Object oriented Programming 
+        Object means the realworld problem domain having data 
+implementation was XXX,c with classses(c++)
+
+OO talks about how to organize data and its operations togther
+
+ Object | class = {data + operations}
+
+Based on class and Objects , Principles were published /  Object oriented Concepts
+..................................................................................
+1.Abstraction
+2.Encapsulation
+3.Typing
+4.Hierachy
+5.Modularity
+.....................
+6.Concurrency
+7.Persistency
+
+1.Abstraction:
+    Abstraction theory talks data collection from the problem domain called "Object".
+  
+ Abstraction says how to extract "necessary data" from the object on given context.   
+
+eg:
+   if you take Mr.x,
+He goes to the bank,What type of information(data) the banker needs.
+ -Mr.X as Customer
+   -CutomerId
+   -CustomerName
+   -address
+   -email,phoneno
+   -type of account
+   -balance
+   etc....
+
+Abstraction collects data and organize under single unit called "class"
+
+How to declare class in Kotlin?
+
+class Customer {
+    //data - properties
+    var customerId:Int
+}
+
+Compile Time error:
+Property must be initialized or be abstract
+
+Note: In Java if any instance variable(property) , not initalized, woulde be null by default.
+You know very well ,Kotlin by default cant have null.
+
+class Customer {
+    //data - properties
+    var customerId: Int? = null
+    var firstName: String? = null
+    var lastName: String? = null
+    var city: String? = null
+    var balance: Double? = null
+}
+
+Memory Allocation:
+..................
+ The program  during runtime,when is loaded into main memory.
+
+We need to allocate memory for variables,methods....
+
+if you allocate memory for group of variables, called "instance/object". - instance creation.
+
+package com.mycom.oo
+
+class Customer {
+    //data - properties
+    var customerId: Int? = null
+    var firstName: String? = null
+    var lastName: String? = null
+    var city: String? = null
+    var balance: Double? = null
+}
+package com.mycom.oo
+
+fun main() {
+    //here customer is variable points the instance , called as reference variable
+    //var is keyword
+    //:Customer is type - custom Type /Abstract type
+    //Customer() - constructor call which indicates memory allocation
+    //In kotlin no new keyword, provided by the compiler
+//    var customer:Customer = Customer() //with explcity
+    var customer = Customer() //with Type inference
+    //property initalization
+    customer.customerId = 1
+    customer.firstName = "Subramanian"
+    customer.lastName = "Murugan"
+    customer.city = "Coimbatore"
+    customer.balance = 19887.00
+    //access property
+    println("Id ${customer.customerId}")
+    println("Name ${customer.firstName} ${customer.lastName}")
+    println("City ${customer.city}")
+    println("Balance ${customer.balance}")
+
+}
 
 
 
 
 
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+   
 
 
 
