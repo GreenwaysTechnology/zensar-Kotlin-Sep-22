@@ -10,7 +10,9 @@ class User {
 //            return field?.uppercase()
 //        }
         //function expression syntax
+        //get() = field?.uppercase()
         get() = field?.uppercase()
+
 
     var firstName: String? = null
     var lastName: String? = null

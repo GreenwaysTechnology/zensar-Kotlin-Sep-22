@@ -1699,6 +1699,756 @@ var async = { payload: String, action: (String) -> Unit ->
 fun main() {
     async("My async task is running...") { println(it) }
 }
+.....................................................................................
+	   Object oriented Programming and implementation
+.....................................................................................
+
+What is Object orientation?
+   "The Object orientation is way/style  of building applications"
+
+if take any Program, there are only two things
+    -Data - information
+    -How to operate on the data
+
+Data represents the problem domain- Banking
+
+Program = { Data  +  actions/operations }
+
+Before OO:
+  data   |  operations are completly isloated  = traditional programming styles - procedural style
+
+ if many operations operate on data, which lead inconsistency,data corrpution/loss, 
+ data duplication.....
+
+1970's white paper was published regarding, How to orgainize the data based problem(domain)-real world.
+
+We need to map the data according to realworld problems what we solve using machines/programs.
+
+Birth of Abstract Data Type of theory:
+......................................
+
+  To create new data types based on core types.
+
+core types:
+    numbers, characters
+    numbers- very very core.
+
+Language types
+    int,float,char -primitive types
+
+NewType = { int,float,int,char,char }
+  |
+Abstract Data Type
+
+Implementation of Abstract data type Theroy:
+
+In c language , abstract data type theroy were implemented via notations 
+
+1.struct
+2.union
+   These notation grouped data into a logical unit.
+3.class
+    The class word dervied from "clause" 
+   Grouping of things(data).
+
+Based on this notatation, c language introduced a concept called "c with classes"
+that later led into a new programming style and implementation 
+    -Object oriented Programming 
+        Object means the realworld problem domain having data 
+implementation was XXX,c with classses(c++)
+
+OO talks about how to organize data and its operations togther
+
+ Object | class = {data + operations}
+
+Based on class and Objects , Principles were published /  Object oriented Concepts
+..................................................................................
+1.Abstraction
+2.Encapsulation
+3.Typing
+4.Hierachy
+5.Modularity
+.....................
+6.Concurrency
+7.Persistency
+
+1.Abstraction:
+    Abstraction theory talks data collection from the problem domain called "Object".
+  
+ Abstraction says how to extract "necessary data" from the object on given context.   
+
+eg:
+   if you take Mr.x,
+He goes to the bank,What type of information(data) the banker needs.
+ -Mr.X as Customer
+   -CutomerId
+   -CustomerName
+   -address
+   -email,phoneno
+   -type of account
+   -balance
+   etc....
+
+Abstraction collects data and organize under single unit called "class"
+
+How to declare class in Kotlin?
+
+class Customer {
+    //data - properties
+    var customerId:Int
+}
+
+Compile Time error:
+Property must be initialized or be abstract
+
+Note: In Java if any instance variable(property) , not initalized, woulde be null by default.
+You know very well ,Kotlin by default cant have null.
+
+class Customer {
+    //data - properties
+    var customerId: Int? = null
+    var firstName: String? = null
+    var lastName: String? = null
+    var city: String? = null
+    var balance: Double? = null
+}
+
+Memory Allocation:
+..................
+ The program  during runtime,when is loaded into main memory.
+
+We need to allocate memory for variables,methods....
+
+if you allocate memory for group of variables, called "instance/object". - instance creation.
+
+package com.mycom.oo
+
+class Customer {
+    //data - properties
+    var customerId: Int? = null
+    var firstName: String? = null
+    var lastName: String? = null
+    var city: String? = null
+    var balance: Double? = null
+}
+package com.mycom.oo
+
+fun main() {
+    //here customer is variable points the instance , called as reference variable
+    //var is keyword
+    //:Customer is type - custom Type /Abstract type
+    //Customer() - constructor call which indicates memory allocation
+    //In kotlin no new keyword, provided by the compiler
+//    var customer:Customer = Customer() //with explcity
+    var customer = Customer() //with Type inference
+    //property initalization
+    customer.customerId = 1
+    customer.firstName = "Subramanian"
+    customer.lastName = "Murugan"
+    customer.city = "Coimbatore"
+    customer.balance = 19887.00
+    //access property
+    println("Id ${customer.customerId}")
+    println("Name ${customer.firstName} ${customer.lastName}")
+    println("City ${customer.city}")
+    println("Balance ${customer.balance}")
+
+}
+....................................................................................
+			   variable declarations
+
+1.using var keyword - can be reinitalized
+2.using val keyword - cant be reinitalized - immutable variables
+   The original memory address can't be overriden.
+  
+package com.mycom.oo
+
+fun main() {
+    var x = 10
+    println("X $x")
+    //x value is reinitialized
+    x = 90
+    println("X $x")
+    val y = 10
+    println("Y $y")
+    //val cant be reinitlized
+    //y=90
+    println("Y $y")
+
+
+}
+
+.....................................................................................
+			 State(data-properties) Initalization
+.....................................................................................
+1.Inside class
+2.outside class after object creation via reference variable
+3.during object creation - constructors
+
+
+Inside class:
+
+Direct assignment:
+package com.mycom.oo
+
+class Employee {
+    //property initialization - inside class directly
+    var employeeId: Int? = 0
+}
+package com.mycom.oo
+
+fun main(){
+    var employee = Employee()
+    println("Id ${employee.employeeId}")
+}
+
+via init block:
+init is special block used to initalize the variables and any code.
+A Single class can have mulitple init blocks but recommended having only one init block
+init blocks are getting executed the order in which they declared
+
+package com.mycom.oo
+
+class Employee {
+    //property initialization - inside class directly
+    //var employeeId: Int? = 0
+    var employeeId: Int?
+
+    //init block
+    init {
+        println("init block -1")
+        employeeId = 0
+    }
+
+    init {
+        println("init block-2 ")
+    }
+
+    init {
+        println("init block 3")
+    }
+}
+..................................................................................
+			Outside class 
+
+package com.mycom.oo
+
+fun main(){
+    var employee = Employee()
+
+    println("Id ${employee.employeeId}")
+    //outside class :
+    employee.employeeId =100
+    println("Id ${employee.employeeId}")
+}
+
+In java , all instance variables either initalized via constructors or setters
+
+Setters :Mutatators:
+...................
+1. It is a Special method, used to initalize the properties
+2.It is part of java bean specification.
+
+Kotlin and setters:
+..................
+1.Kotlin does not recommended to have setters by default.
+2.Kotlin uses implicit setters by default.
+employee.employeeId =100
+ In this code, setters are called implicitly.
+
+Getters : Accessors:
+...................
+1.It is Special method , used to read the properites
+2.It is part of java bean specification.
+
+Kotlin and getters:
+..................
+1.Kotlin does not recommended to have getters by default.
+2.Kotlin uses implicit getters by default.
+ println(employee.employeeId)
+ In this code, getters are called implicitly.
+
+
+Can we have explcit getters and setters?
+
+ Yes!
+
+Syntax:
+ var <propertyName> :[<PropertyType>] = [<property_initalizer>]
+ [getter]
+ [setter]
+ 
+eg:
+package com.mycom.oo
+
+class User {
+    var name: String? = null
+        set(value) {
+            //backing fields
+            field = "Mr/Mrs $value"
+        }
+        get() {
+            return field?.uppercase()
+        }
+    var age: Int? = null
+        set(value) {
+            //Age must be greater than 18
+            if (value?.compareTo(18)!! < 0) {
+                throw Exception("Age must be greater than 18")
+            } else {
+                field = value
+            }
+        }
+}
+
+package com.mycom.oo
+
+fun main() {
+    val user = User()
+    user.name = "Subramanian"
+    user.age =10
+    println(user.name)
+    println(user.age)
+
+}
+
+Here exception is thrown when age is less than 18.
+Exception in thread "main" java.lang.Exception: Age must be greater than 18
+	at com.mycom.oo.User.setAge(User.kt:16)
+	at com.mycom.oo.PropertyInitalizationV2Kt.main(PropertyInitalizationV2.kt:6)
+	at com.mycom.oo.PropertyInitalizationV2Kt.main(PropertyInitalizationV2.kt)
+
+
+package com.mycom.oo
+
+fun main() {
+    val user = User()
+    user.name = "Subramanian"
+    user.age =19
+    println(user.name)
+    println(user.age)
+
+}
+Here the out put is shown.
+MR/MRS SUBRAMANIAN
+19
+
+Computed Property:
+  The combining more variables and producing an expression.
+
+
+package com.mycom.oo
+class User {
+    var firstName: String? = null
+    var lastName: String? = null
+    //computed Property syntax
+    var fullName: String = ""
+        get() {
+            return "${this.firstName} ${this.lastName}"
+        }
+
+
+}
+
+package com.mycom.oo
+
+fun main() {
+    val user = User()
+    user.firstName ="Subramanian"
+    user.lastName ="Murugan"
+    println("Full Name ${user.fullName}") 
+
+}
+.....................................................................................
+			  Getters are Function expression syntax
+.....................................................................................
+
+package com.mycom.oo
+
+class User {
+    var name: String? = null
+        set(value) {
+            //backing fields
+            field = "Mr/Mrs $value"
+        }
+        //        get() {
+//            return field?.uppercase()
+//        }
+        //function expression syntax
+        get() = field?.uppercase()
+
+    var firstName: String? = null
+    var lastName: String? = null
+
+    //computed Property syntax
+    var fullName: String = ""
+        //        get() {
+//            return "${this.firstName} ${this.lastName}"
+//        }
+        get() = "${this.firstName} ${this.lastName}"
+
+   
+}
+.....................................................................................
+	How to initalize the property during object creation?
+			constructors
+
+Constructors are special methods are used to initalize the object properties during object /instance creation.
+			 
+properties are declared in kotlin in two ways
+
+1.inside class
+class User{
+  var name:String? =null
+}
+2.as part of Constructor.
+
+Types of Constructors:
+.....................
+1.Primary constructor
+2.Secondary constructor.
+
+Primary constructors are default constructors
+Secondary constructors are used for overloading.
+
+Primary constructors:
+ -primary constructors are added as part of class header.
+
+class ClassName constructor(){}
+
+ Note:
+  if the primary constructor does not have any annotations or visibility modifers, the constructor keyword can be omitted.
+
+class ClassName (){}
+class ClassName [private | @Something] constructor(){}
+
+Primary constructors does not contain any code, if you want any special initalization ,should be given inside "init block
+
+
+package com.mycom.oo.constru
+
+class Person constructor(var firstName: String = "", val age: Int = 0) {
+}
+package com.mycom.oo.constru
+
+fun main() {
+    val person = Person(firstName = "Subramanian", age = 19)
+    println("Name ${person.firstName} Age  ${person.age}")
+}
+
+..............
+
+without constructor keyword:
+.............................
+
+package com.mycom.oo.constru
+class Person(var firstName: String = "", var age: Int = 0) {
+}
+
+...
+Constructors and init block:
+............................
+package com.mycom.oo.constru
+
+class Person(var firstName: String = "", var age: Int) {
+    init {
+        age = 18
+    }
+}
+...................................................................................
+			Secondary Constructors
+..................................................................................
+A class can have more constructors apart from the primary constructors, generally to mimic the overloading.
+
+A secondary constructors are introduced inside class using constructor keyword.
+
+Eg:
+package com.mycom.oo.constru
+
+class Foo constructor() {
+    //secondary constructors
+    constructor(a:String){
+        
+    }
+    
+}
+Here the compile time error
+
+Primary constructor call expected
+
+package com.mycom.oo.constru
+
+class Foo constructor() {
+    //secondary constructors
+    //invoke always primary constructor
+    constructor(a: String) : this() {
+        println("Constructor with String arg")
+    }
+    constructor(b: Int) : this() {
+        println("Constructor with Int  arg")
+    }
+    constructor(a:Int,b:Int):this(){
+        println("Constructor with Int, Int arg")
+    }
+}
+
+Note:
+   Each secondary constructor needs to delegate to the primary constructors either directly or indirectly through another secondary constructors.
+Delegation to another constructor for same class is done using "this" keyword.
+
+...................................................................................
+
+Primary constructor can't have any code, suppose if you want  to add any extra code
+that be can be done using secondary constructors
+
+
+package com.mycom.oo.constru
+
+
+class Employee(var name: String, var age: Int) {
+    constructor(age: Int, name: String) : this(name,age) {
+        println("some extra code is being executed inside constructor")
+    }
+}
+package com.mycom.oo.constru
+
+fun main() {
+   
+    var employee = Employee(41,"Subramanian")
+}
+.....................................................................................
+			 Class Members
+.....................................................................................
+A class can contain many things
+
+1.constructors and iniitalizer blocks
+2.properties
+3.functions
+4.Nested and inner classes
+5.Object declartions.
+
+
+functions inside class:
+package com.mycom.oo.classfunctions
+
+class EmployeeService {
+
+    //methods or functions
+    fun findAll(): String {
+        return "findAll"
+    }
+
+    fun save(employee: String): Boolean {
+        println("$employee is saved")
+        return true
+    }
+
+    // single expression function
+    fun remove(id: Int) = "$id Removed"
+}
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+
+package com.mycom.oo.classfunctions
+
+fun main(){
+    var employeeService = EmployeeService()
+    println (employeeService.findAll())
+    println(employeeService.save("foo"))
+    println(employeeService.remove(10))
+}
+.....................................................................................
+			class memebers - functions-higher order,lambda 
+
+A class can contain all the form of functions.
+
+package com.mycom.oo.classfunctions
+
+class Util {
+
+    //normal function
+    fun sayHai(): Unit {
+        println("Hai")
+    }
+
+    //literal function declaration
+    var sayHello: () -> Unit = fun() {
+        println("Hello")
+    }
+
+    //higher order function
+    fun login(userName: String = "", password: String = "", resolve: (String) -> Unit, reject: (String) -> Unit) {
+        //biz logic
+        if (userName == "admin" && password == "admin")
+            resolve("Login Success")
+        else
+            reject("Login failed")
+    }
+
+    //lambda expression
+    var addLambda = { a: Int, b: Int ->
+        //body of the fun expression
+        //return a + b //return keyword is not used
+        a + b
+    }
+
+    //higher order lambdas
+    fun delay(action: () -> Unit) {
+        action()
+    }
+    //higher order lambda: passing lambda as parameter to another lambda
+    var async = { action: (String) -> Unit ->
+        action("async function")
+    }
+}
+.........
+package com.mycom.oo.classfunctions
+
+fun main() {
+    var util = Util()
+    //normal function
+    util.sayHai()
+    //literal functions
+    util.sayHello()
+    //higher order function
+    util.login(userName = "admin", password = "admin",
+        fun(status) {
+            println(status)
+        },
+        fun(err) {
+            println(err)
+        })
+    //lambda
+    println(util.addLambda(10, 10))
+    //higher order lambda
+    util.delay { println("Task is more") }
+
+    //higher order lambda but passing lambda as parameter
+    util.async { println(it) }
+
+}
+...................................................................................
+				Dynamic Programming
+				
+In java, if you declare methods inside class, only those methods only can be used after instance creation.
+
+//Util.java
+public class Util{
+    public void add(){
+
+    }   
+}
+Util util = new Util()
+util.add()
+
+here apart from "add" method we cant use other methods.
+
+Some languages(javascript,groovy) offers a feature to add method dynamically/during runtime without explcitly declaring inside class - "dynamic programming"
+
+Kotlin provides the ability to extend(add) a class or interface with new functionality without having to inherit or use any design patterns like "decorator".
+This is done via special declarations called "extensions".
+
+Use case:
+if you are using third party libs/frameworks that you cant modify, if you want to add any special apis, you can do that.
+
+You can call that functions as if they were methods of the original class - "This is called as Extension function".
+
+Not only methods even you can add properties too  - Extension Property
+
+Extension Functions:
+...................
+
+To declare extension function, the prefix its name with a "receiver type" which referes to the type being extended
+
+
+fun ReceiverType.method(args):{
+   //function body
+}
+
+package com.mycom.oo.dynamicprogramming
+
+class Util {
+    //member function
+    fun sayHello():String {
+        return "Hello"
+    }
+}
+..
+package com.mycom.oo.dynamicprogramming
+
+//extensions
+fun Util.sayHai(): String {
+    return "Hai"
+}
+
+fun main() {
+    var util = Util();
+    //calling member function
+    println(util.sayHello())
+    println(util.sayHai())
+}
+...................................................................................
+		Can we extend any built in classes?
+
+Yes, if you look at in java, String is final class, meaning that you cant extend(inherit) the class, so you cant have your own string apis.
+Thats where extension functions comes into picture.
+
+package com.mycom.oo.dynamicprogramming
+
+//extensions
+fun Util.sayHai(): String {
+    return "Hai"
+}
+
+fun String.add(s1: String, s2: String): String {
+    //this refers the method is called on which object
+    return this + s1 + s2
+}
+
+fun main() {
+    var util = Util();
+    //calling member function
+    println(util.sayHello())
+    println(util.sayHai())
+    //strings
+    var str1: String = "Hello"
+    var str2: String = "Hai"
+    var str3 = "Hey"
+    //str3 is receiver type
+    println(str3.add(str1, str2))
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+   
+
 
 
 
