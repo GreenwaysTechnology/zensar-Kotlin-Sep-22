@@ -2417,14 +2417,233 @@ fun main() {
     println(str3.add(str1, str2))
 
 }
+......................................................................
+				Extension Properties
+...................................................................................
+package com.mycom.oo.dynamicprogramming
+
+class MyUtil {
+}
+
+//adding new Property outside class
+val MyUtil.greetings:String
+  get() = "Hello"
+
+fun main() {
+    var util = MyUtil()
+    println(util.greetings)
+}
+.....................................................................................					Infix function
+.....................................................................................
+
+What is Infix function?
+
+Functions are marked with the keyword called "infix".
+Infix functions are used to create DSL based code, we can omit the parenteses.
+
+class A {
+ infix fun doStuff(x:Int){}
+}
+val a = A()
+
+a.doStuff(10)
+
+a doStuff 10
+
+"hello" indexof 1
+
+Rules:
+1.It must be member functions or extensions functions
+2.They must have single parameter
+3.The parameter must not accept variable number of args and must have no default value.
+
+package com.mycom.oo.dynamicprogramming
+
+class MyClass {
+    infix fun sayHello(name: String) {
+        println("$this $name")
+    }
+
+}
+
+//infix function can be extension function too
+infix fun Int.myadd(x: Int) {
+    println(this)
+    println(x)
+}
+
+fun main() {
+    //omitting parentheses
+    10 myadd 2
+    val greeter = MyClass()
+    greeter sayHello "Subramanian"
+
+}
+....................................................................................
+			 Member functions calling pattern
+...................................................................................
+
+Member function can be called using reference variable
+Member function can be called Using Constructor call itself.
+
+package com.mycom.oo.dynamicprogramming
+
+class MyService {
+    fun findAll(): String = "findAll"
+}
+
+fun main() {
+    //using reference variable
+    val service = MyService()
+    println(service.findAll())
+    //using constructors
+    println(MyService().findAll())
+}
+.....................................................................................
+			 inline functions
+...................................................................................
+
+What is inline?
+
+by inserting the function code at the address of each function call, thereby saving the overhead of a function call
+
+          "copy and paste function code into calling place"
+
+Regular functions call
+caller(calling place)
+fun foo(){
+  doStuff()
+}
+
+callee
+fun doStuff(){
+
+}
+
+Inlining basically requesting the compiler to copy the (inlined) code at the calling place
+
+Why?
+ Avoiding un necessary stack creations so that you can avoid tracking return address,args values....
+
+Kotlin and Inline Functions:
+...........................
+In Kotlin, the higher order functions and lambdas are represented as "Object" behind the scene.
+
+Since it is object takes some memory and increase the memory overhead if function gets called more no of times.
+
+The use case might be the function does a very basic functionality that passing the control is not even worth as it is being used in multiple places, we need to create a separate function.
+
+in order to reduce memory overhead of such functions we can use the "inline" keyword.
+
+"inline" requests the CPU to not allocate any memory for the functionand simply the copy body of that function at the calling place.
 
 
 
+package com.mycom.oo.dynamicprogramming
+
+inline  fun mulitpleOf(no: Int, multipleOf: Int): Boolean {
+    return no % multipleOf == 0
+}
+
+fun ArrayList<Int>.filterOnCondition(condition: (Int) -> Boolean): ArrayList<Int> {
+    var result = arrayListOf<Int>()
+    for (item in this) {
+        if (condition(item)) {
+            result.add(item)
+        }
+    }
+    return result
+}
+
+fun main() {
+    var list = arrayListOf<Int>()
+    for (n in 1..1000) {
+        list.add(n)
+    }
+    //passing function as parameter:
+    var result = list.filterOnCondition { mulitpleOf(it, 5) }
+    println(result)
+
+}
+
+Note;
+ if function having more logic that is more lines of code , dont mark inline.
+....................................................................................
+			Hierachy - Object Relationship
+....................................................................................
+There are two types of Hierachy:
+
+1.HAS -A - Composition
+2.IS -A - Inheritance.
+
+Code Reuse Patterns:
+1.inheritance
+2.compostion
+
+IS A: Inheritance:
+..................
+
+What is inheritance? Why Inheritance?
+
+Code Reuse,To avoid code duplication across the application, having common that can be shared.
+
+Inheritance Code Reuse Implementations:
+.......................................
+1.class - concrete class
+2.interfaces
+3.Abstract classes
+
+Parent class and child class
 
 
+Kotlin and inheritance:
+
+In kotlin all classes are freezed by default for extension(inheritance).
+Inheritance is disabled by default.
+In Kotlin all classes are "final classes" by default.
 
 
+Syntax:
 
+class MyClass : BaseClass(){
+
+}
+
+class Animal{
+
+}
+class Dog :Animal() {
+
+}
+
+compile time error:
+This type is final, so it cannot be inherited from
+
+if any class is to be extended it has to be marked as "open"
+
+package com.mycom.oo.hierachy.`is`
+
+
+package com.mycom.oo.hierachy.`is`
+
+
+open class Animal {
+    init {
+        println("Animal class is called")
+    }
+}
+
+class Dog : Animal() {
+    init {
+        println("Dog class is called")
+    }
+}
+
+
+fun main() {
+    var dog = Dog()
+
+}
 
 
 
