@@ -2644,29 +2644,366 @@ fun main() {
     var dog = Dog()
 
 }
+....................................................................................
+			   Typing 
 
 
+How the reference variables going to bind the expressions during compile time and runtime?
+
+var myref = Dog()
+
+Dog myref= Dog()
+
+Polymorphism:
+  
+Compile time  
+   The reference variable binds the properties and methods during compile time
+ This method belongs to this Type
+ var myref = Dog()
+ myref.bark()
+ myref.something()
+
+Run time 
+  The runtime calls the implmentation side, the object side.
+ The program  to super type
+
+The reference variable type can be same type or its parent Type...
 
 
+ eg:
+package com.mycom.oo.typing
 
+open class Animal {
+    fun eat(): String {
+        return "Animal eats"
+    }
+}
 
+class Dog : Animal() {
 
+}
 
+fun main() {
+    //here type of animal variable is Dog : Program to concrete type/type
+    var animal = Dog();
+    println(animal.eat())
+}
 
+output:
+Animal eats
 
+How that method is avaiable inside Dog class , even though the method is represented inside "Animal" class.
 
+Inheritance happens always in compile time.
 
+source coe
+Animal.kt
+open class Animal {
+    fun eat(): String {
+        return "Animal eats"
+    }
+}
 
+Dog.kt
+class Dog : Animal() {
 
+}
+After compilation:
+Animal.class
+class Animal {
+    public String eat() {
+        return "Animal eats"
+    }
+}
 
+Dog.class
+class Dog extends Animal {
+    public String eat() {
+        return super.eat()
+    }
+}
 
+var animal = Dog();
+println(animal.eat())
 
+...
+How to implment eat method in the Dog class?
 
+ This is called overriding.
 
+In kotlin all methods are by default "final" - cant be overriden.
 
+if you want to override the method, you have to open it
+in the dervied class we have to use "override" keyword.
 
+package com.mycom.oo.typing
+
+open class Animal {
+    open fun eat(): String {
+        return "Animal eats"
+    }
+}
+
+class Dog : Animal() {
+    //overriding
+    override fun eat(): String {
+        return "Dog eats"
+    }
+}
+
+fun main() {
+    //here type of animal variable is Dog : Program to concrete type/type
+    var animal = Dog();
+    println(animal.eat())
+}
+.....................................................................................
+			 Program to Super Type
+....................................................................................
+package com.mycom.oo.typing
+
+open class Animal {
+    open fun eat(): String {
+        return "Animal eats"
+    }
+}
+
+class Dog : Animal() {
+    //overriding
+    override fun eat(): String {
+        return "Dog eats"
+    }
+}
+
+fun main() {
+     //super type
+    var animal1: Animal = Dog();
+    println(animal1.eat())
+}
+.....................................................................................
+			  Super type and Sub type
+....................................................................................
+package com.mycom.oo.typing
+
+open class Animal {
+    open fun eat(): String {
+        return "Animal eats"
+    }
+}
+
+class Dog : Animal() {
+    //overriding
+    override fun eat(): String {
+        return "Dog eats"
+    }
+
+    //Dog specific method
+    fun bark(): String {
+        return "Dog barks"
+    }
+}
+
+/**
+ * during compile time the compiler looks left Side(type) for method expression bindings
+ * during runtime time the run time looks right side(Instance) for method invocation -Dynamic
+ * method invocation/ Dynamic method dispatch... :Runtime polymorphism
+ */
+fun main() {
+    //here type of animal variable is Dog : Program to concrete type/type
+    var animal = Dog();
+    println(animal.eat())
+    println(animal.bark())
+    //super type
+    var animal1: Animal = Dog();
+    println(animal1.eat())
+    //Here this compile error time
+    //println(animal1.bark())
+    
+}
  
-   
+How to invoke sub class method using parent Type?
+
+Solution is "Type Casting"
+We have to convert Animal type to Dog type - Down casting.
+
+package com.mycom.oo.typing
+
+open class Animal {
+    open fun eat(): String {
+        return "Animal eats"
+    }
+}
+
+class Dog : Animal() {
+    //overriding
+    override fun eat(): String {
+        return "Dog eats"
+    }
+
+    //Dog specific method
+    fun bark(): String {
+        return "Dog barks"
+    }
+}
+
+/**
+ * during compile time the compiler looks left Side(type) for method expression bindings
+ * during runtime time the run time looks right side(Instance) for method invocation -Dynamic
+ * method invocation/ Dynamic method dispatch... :Runtime polymorphism
+ */
+fun main() {
+    //here type of animal variable is Dog : Program to concrete type/type
+    var animal = Dog();
+    println(animal.eat())
+    println(animal.bark())
+    //super type
+    var animal1: Animal = Dog();
+    println(animal1.eat())
+    //Here this compile error time
+    //println(animal1.bark())
+    //how to call
+    //convert animal type to Dog type
+    var tmpDog = animal1 as Dog
+    println(tmpDog.bark())
+
+}
+....................................................................................
+			 How to override properties
+...................................................................................
+
+package com.mycom.oo.hierachy.`is`
+
+open class Shape {
+    open val x: Int = 0
+}
+
+class Square : Shape() {
+    override val x: Int = 10
+}
+
+fun main() {
+    var shape = Square()
+    println(shape.x)
+}
+...................................................................................
+		 How to call Super class properties and methods
+package com.mycom.oo.hierachy.isa
+
+open class Account {
+    open fun deposit(): Int {
+        return 100
+    }
+    val accountType:String get() = "Account Type"
+}
+class SavingsAccount:Account() {
+    override fun deposit(): Int {
+        return super.deposit() * 1000
+    }
+    val accType:String get() = "${super.accountType} is Savings Account"
+
+}
+fun  main(){
+    val sb = SavingsAccount()
+    println(sb.deposit())
+    println(sb.accType)
+}
+.....................................................................................
+			  Interfaces
+.....................................................................................
+
+interfaces are used to share code "across multiple hierachies" where as the classes are used to share code only to particular type.
+
+classes based hierachy:
+  Single family 
+eg : Animal
+
+    Animal
+      |
+     eat
+
+ Dog 
+ Cat
+
+interface based hierachy
+  Multiple family of classes
+  
+    Eatable
+      eat
+  |     |      |
+Animal Birds Humans
+.....................................................................................
+	                  Interfaces with implmentation
+package com.mycom.oo.hierachy.isa.interfaces
+
+interface Eatable {
+    //open fun eat(): String;
+    fun eat(): String;
+}
+
+//implmentation
+class Dog : Eatable {
+    override fun eat(): String {
+        return "Dog Eats"
+    }
+
+    fun bark(): String {
+        return "Bark"
+    }
+}
+
+class Duck : Eatable {
+    override fun eat(): String {
+        return "Duck Eats"
+    }
+    fun swim():String {
+        return "swim"
+    }
+}
+
+
+fun main() {
+    //concrete type
+    val dog = Dog()
+    println(dog.eat())
+    val duck = Duck()
+    println(duck.eat())
+    //polymorphism : Super type
+
+    var eatableBehaviour: Eatable? = null
+    //Dog implmenation
+    eatableBehaviour = Dog()
+    println(eatableBehaviour.eat())
+    //smart casting happens
+    println(eatableBehaviour.bark())
+    //Duck implmenation
+    eatableBehaviour = Duck()
+    println(eatableBehaviour.eat())
+    println(eatableBehaviour.swim())
+
+}
+
+Note: 
+ In the code we have not done explicit casting in order to call implmentation instance
+  "Kotlin will take of casting automatically Which is called "Smart casting".
+  This is applicable only to interfcase
+..............................................................................
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
