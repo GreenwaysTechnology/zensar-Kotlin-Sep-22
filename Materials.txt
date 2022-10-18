@@ -2986,7 +2986,507 @@ Note:
   "Kotlin will take of casting automatically Which is called "Smart casting".
   This is applicable only to interfcase
 ..............................................................................
- 
+ 			Multiple interfaces and inheritance
+.....................................................................................
+package com.mycom.oo.hierachy.isa.interfaces
+
+interface Eat {
+    fun eat():String
+}
+interface Walk  {
+    fun walk():String
+}
+class Cat : Eat,Walk {
+    override fun eat(): String {
+        return "Eat"
+    }
+
+    override fun walk(): String {
+       return "Walk"
+    }
+}
+
+fun main(){
+    var cat = Cat();
+    println(cat.eat())
+    println(cat.walk())
+}
+..................................................................................
+			Method Conflicts in multiple interfaces
+			  and How to resolve them
+
+
+package com.mycom.oo.hierachy.isa.interfaces
+
+interface Interface1 {
+    fun doStuff(): String
+}
+
+interface Interface2 {
+    fun doStuff(): String
+}
+
+class Implementator : Interface1, Interface2 {
+    override fun doStuff(): String {
+        return "Implementor"
+    }
+}
+
+fun main() {
+    var myvar = Implementator()
+    println(myvar.doStuff())
+}
+....................................................................................
+			Interfaces and Implmentations
+
+Interface can have implementations too, what if method duplications?
+
+The implementor class must provide default implementation and inside that implmentation we need to call method "super<Interface1>.foo()"
+
+package com.mycom.oo.hierachy.isa.interfaces
+
+interface Interface1 {
+    fun doStuff(): String
+    fun foo(){
+        println("foo Interface1")
+    }
+}
+
+interface Interface2 {
+    fun doStuff(): String
+    fun foo(){
+        println("foo Interface2")
+    }
+}
+
+class Implementator : Interface1, Interface2 {
+    override fun doStuff(): String {
+        return "Implementor"
+    }
+
+    override fun foo() {
+        super<Interface2>.foo()
+    }
+}
+
+fun main() {
+    var myvar = Implementator()
+    println(myvar.doStuff())
+    myvar.foo()
+
+}
+....................................................................................
+			Functional Interfaces-SAM
+
+There are two implementations of SAM
+
+1.java style
+   -Using anonmous inner class Pattern
+2.kotlin style
+   We have to declare with fun keyword.
+
+Inside interface if you declare methods, those methods are called as "abstract methods" 
+interface Interface1 {
+    //abstract methods
+    fun doStuff(): String
+}
+abstract methods are methods without implmentations.
+
+if an interface having single abstract method, that interface is called "SAM" -  Single Abstract method.
+
+SAM interfaces are used inside lambda expressions.
+
+
+if you wanto implement interface , you need class, using functional interfaces you dont need to provide a separte class rather we object anomous inner class.
+
+package com.mycom.oo.hierachy.isa.interfaces
+
+interface Greeter {
+    fun greet(): Unit
+}
+
+//class GreeterImpl : Greeter {
+//    override fun greet() {
+//        println("Greet")
+//    }
+//}
+
+fun main() {
+//    var greet = GreeterImpl()
+    //    greet.greet()
+
+    //anonymous implementation
+    var greet = object : Greeter {
+        override fun greet() {
+            println("Greet")
+        }
+    }
+    greet.greet()
+}
+
+......
+
+Kotlin style:
+
+fun interface Hello(){ 
+   fun sayHello():Unit
+}
+package com.mycom.oo.hierachy.isa.interfaces
+
+
+//Kotlin Style
+
+fun interface Hello {
+    //single abstract method
+    fun sayHello(): Unit
+}
+
+//
+fun interface Predicate {
+    fun accept(i: Int): Boolean
+}
+
+fun main() {
+   //anonymous implementation
+    var hello = object : Hello {
+        override fun sayHello(): Unit {
+            println("Hello Anonmous pattern")
+            //return ""
+        }
+    }
+    hello.sayHello()
+    //Lambda expression
+    var hello1 = Hello { println("Hello lambda ") }
+    hello1.sayHello()
+    var isEven = Predicate { it % 2 == 0 }
+    print(isEven.accept(3))
+}
+....................................................................................
+			  HAS-A
+..................................................................................
+
+Composition:
+   Object linking
+
+
+package com.mycom.oo.hierachy.hasa
+
+
+class Address(var street: String = "street", var city: String = "city") {
+
+}
+
+//has-a
+class Employee(var id: Int = 0, var name: String = "name", var address: Address = Address()) {
+
+}
+
+fun main() {
+    var emp = Employee(id = 10, name = "Subramanian", address = Address(street = "10th street", city = "Coimbatore"));
+    println(emp.id)
+    println(emp.name)
+    println(emp.address.street + emp.address.city)
+}
+....................................................................................
+IS a - Inheritance happens during compile time
+HAS A - happens during runtime
+....................................................................................
+				Encapsulation
+...................................................................................
+
+How to share and how to restrict code from one class and one package to class and another package
+
+Visibility modifers are keywords to restrict code sharing.
+
+What can be the code?
+ code can be "class,objects,interfaces,constructors,functions, properties and its setters and getters".
+
+modifers:
+ private,protected,internal and public.
+
+The default modifier is public.
+.....................................................................................
+			        Modularity 
+....................................................................................
+  
+How to organize the code?
+
+In java eco system,Code is organized into folders and files at low level(disk level)
+and into packages and subpackages at logical level(memory)
+
+When we organize code, we have to define rules for how to share and how to restrict
+ -Encapsulation
+
+Modularity:
+
+package statement
+
+class
+fun
+interfaces 
+variables
+
+what is naming standard for packages?
+
+com.companyName.moduleName.subModule
+ |     
+company 
+
+org.organzationName.moduleName.subModule
+
+DNS naming standards
+
+package com.google.android;
+package android.core.lib;
+
+Types of packages:
+
+1.custom package
+   package defined by developers
+2.built in packages 
+  packages provided by language
+3.thrid party packages
+  packages provided by third community - frameworks,libs
+
+
+Built in Packages for kotlin:
+.............................
+
+package kotlin
+
+ This core package which is eq in java , java.lang package
+
+pacakge kotlin.collections
+   Which offers all data structures used by languge
+
+package kotlin.concurrent
+   Basic thread functionality
+
+package kotlin.coroutines
+    Async programming
+
+package kotlin.io
+     io apis for reading,writing data from and to files,streams
+
+
+Core Package's Types : kotlin
+...............................
+
+Any :
+   It is root of every kotlin class. which is eq to java.lang.Object
+  
+This class offers
+
+1.equals
+2.hashcode
+3.toString
+
+toString:
+ Returns the String representation of object. by default "Any" class has logic
+like below
+
+com.mycom.oo.builtinpacks.Greeting@880ec60
+ | 
+packageName.className@Hashcode
+
+package com.mycom.oo.builtinpacks
+
+class Greeting {
+
+}
+
+fun main(){
+    var greeting = Greeting()
+    println(greeting.toString())
+}
+
+overriding to string method:
+
+package com.mycom.oo.builtinpacks
+
+class Greeting {
+    var name = "Subramanian";
+
+    override fun toString(): String {
+        return "name  [$name]";
+    }
+}
+
+fun main() {
+    var greeting = Greeting()
+    println(greeting.toString())
+}
+.....................................................................................
+equals:
+  Compare two objects says that whether objects are equal or not.
+
+package com.mycom.oo.builtinpacks
+
+class Square(val side: Int) {
+
+}
+
+fun main() {
+    val square1 = Square(10)
+    val square2 = Square(10)
+    val isEqual = square1.equals(square2)
+    println(isEqual)
+}
+output:
+false
+
+How equals methods returns false?
+ Any class has method which always returns false.
+
+in order to compare objects, we need to override equals method.
+
+Object equality is done via comparing object properties only
+for eg in Employee, each employee is identified by employeeId....
+if two objects employeeId is same , objects are same or Objects are different..
+
+package com.mycom.oo.builtinpacks
+
+class Square(val side: Int) {
+    //override the equals methods and say that object equality
+    override fun equals(other: Any?): Boolean {
+        if (other is Square) {
+            return other.side == side
+        }
+        return false;
+    }
+}
+
+fun main() {
+    val square1 = Square(10)
+    val square2 = Square(10)
+    val isEqual = square1.equals(square2)
+    println(isEqual)
+}
+...................................................................................
+			 Object Comparsions using == operator
+.....................................................................................
+
+package com.mycom.oo.builtinpacks
+
+class Square(val side: Int) {
+    //override the equals methods and say that object equality
+    override fun equals(other: Any?): Boolean {
+        if (other is Square) {
+            return other.side == side
+        }
+        return false;
+    }
+}
+
+fun main() {
+    val square1 = Square(10)
+    val square2 = Square(10)
+    val isEqual = square1.equals(square2)
+    println(isEqual)
+
+    //equal operator
+    var isInstanceEqual =  square1 == square2
+    println("Instance Equal ${isInstanceEqual}")
+}
+
+Note:
+ in kotlin equals operator (==) and equals method behaves same...
+
+
+Kotlin has introduced new operator called "===" which compares the object locations rather than object properties
+
+package com.mycom.oo.builtinpacks
+
+class Square(val side: Int) {
+    //override the equals methods and say that object equality
+    override fun equals(other: Any?): Boolean {
+        if (other is Square) {
+            return other.side == side
+        }
+        return false;
+    }
+}
+
+fun main() {
+    val square1 = Square(10)
+    val square2 = Square(10)
+    val isEqual = square1.equals(square2)
+    println("Equals method ${isEqual}")
+
+    //equal operator
+    var isInstanceEqual =  square1 == square2
+    println("Instance Equal using == operator ${isInstanceEqual}")
+
+    var isObjectEquals =  square1 === square2
+    println("Instance Equal using === ${isObjectEquals}")
+
+
+}
+
+== is called as "Structural equality" -  object property verification
+=== is called as "Referential equality" - object memory location verifcation.
+
+We have invert operator !== and !=
+
+.....................................................................................
+
+hashcode:
+ it is unquie no generated by jvm and attached to every instance , in order to identify the objects.
+
+package com.mycom.oo.builtinpacks
+
+class Employee {
+    override fun hashCode(): Int {
+        return 100*100
+    }
+}
+
+
+fun main() {
+    var employee = Employee()
+    print(employee.hashCode())
+}
+
+....................................................................................
+Any class:
+
+1.Any can't hold the null value,if you need null to be part of your variable declaration, you can use the type "Any?"
+....................................................................................
+	     What if i want all methods of Any class overriden in sub class?
+
+
+"Data Class":
+.............
+ It is sole purpose as name indicates to hold data.
+Data classes can hold standard functionality and some utilty functions such as tostring,hashcode,equals.
+
+how to declare data classes
+
+package com.mycom.oo.builtinpacks
+
+data class User(val name:String,val age:Int)
+fun main(){
+    var user = User("Subramanian",18);
+    println(user.toString())
+}
+
+Data classes offers:
+1.equals and hashcode pair
+2.toString of the form "User(name=Subramanian,age=18")
+3.copy method to clone the object safely
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
