@@ -3464,17 +3464,127 @@ how to declare data classes
 
 package com.mycom.oo.builtinpacks
 
-data class User(val name:String,val age:Int)
-fun main(){
-    var user = User("Subramanian",18);
+data class User(val name: String, val age: Int)
+
+fun main() {
+    var user = User("Subramanian", 18);
     println(user.toString())
+    println(user.hashCode())
+    //cloning objecj
+    var newUser = user.copy(age = 41)
+    println("${newUser.name} ${newUser.age}")
+
 }
 
 Data classes offers:
 1.equals and hashcode pair
 2.toString of the form "User(name=Subramanian,age=18")
 3.copy method to clone the object safely
+...................................................................................
+			 Destructuring Object Properties
+.................................................................................
 
+Breaking object properties into more readable pattern.Generally Data Classes can broken into properties.
+
+package com.mycom.oo.builtinpacks
+
+data class Person(var id: Int, var name: String, var city: String) {
+
+
+}
+
+fun main() {
+    var person = Person(id = 1, name = "Subramanian", city = "Coimbatore")
+    println("Without Destructuring")
+    println("${person.id} ${person.name} ${person.city}")
+    println("With Destructuring")
+    var newPerson = Person(id = 1, name = "Subramanian", city = "Coimbatore")
+    var (id, name, city) = newPerson
+    println("${id} ${name} ${city}")
+
+
+}
+.....................................................................................
+			     Sealed Classes
+....................................................................................
+
+Sealed classes and interfaces represent restricted class hierachies that provide more control over inheritance.
+
+All direct subclasses of a sealed class are known at compile time.
+
+No other subclasses may appear outside a module within which the sealed classes is defined.
+
+Sealed classes are abstract by default, so cant be instantiated.
+
+package com.mycom.oo.hierachy.sealedclasses
+
+
+sealed class MyResult {
+    //inner classes
+    data class Success(val resolve: String) : MyResult()
+    data class Failure(var reject: String) : MyResult()
+    class Loader() : MyResult()
+}
+
+
+fun getSuccess(): MyResult {
+    return MyResult.Success("Success")
+}
+
+fun getFailure(): MyResult {
+    return MyResult.Failure("Reject")
+}
+
+fun getResponse(): MyResult {
+    val status = 200
+    if (status == 200) return MyResult.Success("Response Found")
+    return MyResult.Failure("Response Not Found")
+}
+
+fun main() {
+    //var result = Result()
+//    var result = MyResult.Success("Success")
+//    println(result.resolve)
+
+    var success = getSuccess()
+    when (success) {
+        is MyResult.Success -> {
+            println(success.resolve)
+        }
+        is MyResult.Failure -> {
+            println(success.reject)
+        }
+        else -> {
+            println("Loading")
+        }
+    }
+    var failure = getFailure();
+    when (failure) {
+        is MyResult.Success -> {
+            println(failure.resolve)
+        }
+        is MyResult.Failure -> {
+            println(failure.reject)
+        }
+        else -> {
+            print("Data is loading")
+        }
+    }
+
+    var response = getResponse()
+    when (response) {
+        is MyResult.Success -> {
+            println(response)
+        }
+        is MyResult.Failure -> {
+            println(response.reject)
+        }
+        else -> {
+            print("Data is loading")
+        }
+    }
+}
+.................................................................................
 
 
 
