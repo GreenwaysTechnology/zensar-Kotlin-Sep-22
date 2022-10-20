@@ -3585,10 +3585,354 @@ fun main() {
     }
 }
 .................................................................................
+			 Enum class
+..................................................................................
+In order to represent "Named Constants" enums are used.
+
+package com.mycom.oo.hierachy.enumclasses
+
+enum class Color {
+    RED, BLUE, GREEN
+}
+
+enum class Position {
+    NORTH, EAST, WEST, SOUTH
+}
+
+fun main() {
+  println("Value ${Color.RED.ordinal} Name ${Color.RED.name}")
+}
+...................................................................................
+			 Enum initalizers
+
+enum class Day(val day: Int) {
+    MONDAY(1),
+    TUESDAY(2),
+    WEDNESDAY(3),
+    THURSDAY(4),
+    FRIDAY(5),
+    SATURDAY(6),
+    SUNDAY(7)
+
+}
+
+fun main() {
+    println("Value ${Color.RED.ordinal} Name ${Color.RED.name}")
+    println("Day ${Day.MONDAY.day} ${Day.MONDAY.name}")
+}
+
+Enum built in properties:
+
+1.ordinal property
+  To get index of enum value.
+  It is zero based index,the first constant in the options inialized as 0 
+  It is very usefull when implementing comparable interface
+
+2.name property
+  It returns the name of enum constant as a string.
+
+3.values Property
+   It returns List(array) of property,
+   You can easily iterate.
+
+package com.mycom.oo.hierachy.enumclasses
+enum class Day(val day: Int) {
+    MONDAY(1),
+    TUESDAY(2),
+    WEDNESDAY(3),
+    THURSDAY(4),
+    FRIDAY(5),
+    SATURDAY(6),
+    SUNDAY(7)
+
+}
+
+fun main() {
+     //iterate enums
+    for(dateOfWeek in Day.values()){
+        println("[${dateOfWeek.ordinal}] -> ${dateOfWeek.name} (${dateOfWeek.day}) day of the week")
+    }
+}
+....................................................................................				Enums can hold custom properties and methods
+.....................................................................................
+Custom properties and methods can be added to enum classes, just like other kotlin classes
+
+The difference is we need to follow, the certain rules...
+
+Rules:
+1. properties and methods must be added after enum constants definitions after semicolon.
+2.You can declare properties and initalize those like other classes
+3.Enum class can have static and instance methods...
+
+enum class Day(val day: Int) {
+    //enum constants
+    MONDAY(1),
+    TUESDAY(2),
+    WEDNESDAY(3),
+    THURSDAY(4),
+    FRIDAY(5),
+    SATURDAY(6),
+    SUNDAY(7); //semicolon must be declared at end of the enums
+
+    //custom properties
+    var dayOfWeek: Int? = 2
+    var printableName: String? = "Holiday"
+
+    //custom constructors
+    //constructor():this(2)
+    //methods
+    fun doStuff(): String {
+        return "[${dayOfWeek}] -> $printableName"
+    }
+}
+fun main() {
+   println("${Day.MONDAY.dayOfWeek} is ${Day.MONDAY.printableName}");
+
+    println("${Day.MONDAY.doStuff()}");
 
 
+}
+.....................................................................................
+			Nested / Inner classes
+....................................................................................
+
+Class can hold 
+  ->properties
+  ->methods
+  ->constructors
+  ->class/Interface
+
+if a class contains another class,that class is called as "nested" class
+
+package com.mycom.oo.innerclasses
+
+class Counter {
+    init {
+        println("Counter [Outer class]")
+    }
+
+    //Nested class
+    class Increment {
+        init {
+            println("Increment [Nested class]")
+        }
+    }
+}
+
+fun main() {
+    val counter = Counter()
+}
+
+How to initalize the inner class?
+
+1.using outer class method, inside you can create instance.
+package com.mycom.oo.innerclasses
+
+class Counter {
+    init {
+        println("Counter [Outer class]")
+    }
+
+    //Nested class
+    class Increment {
+        init {
+            println("Increment [Nested class]")
+        }
+    }
+    //outer class method
+    fun createInner(){
+        val inc = Increment()
+    }
+}
+
+fun main() {
+    val counter = Counter()
+    counter.createInner()
+}
+
+2.Using Outerclass Type.
+
+ Syntax:
+  Outer.InnerClass()
+package com.mycom.oo.innerclasses
+
+class Counter {
+    init {
+        println("Counter [Outer class]")
+    }
+
+    //Nested class
+    class Increment {
+        init {
+            println("Increment [Nested class]")
+        }
+    }
+
+    //outer class method
+    fun createInner() {
+        val inc = Increment()
+    }
+}
+
+fun main() {
+    //syntax 2
+    val newCounter = Counter.Increment()
+    
+}
+.....................................................................................
+			 Inner class methods 
+.....................................................................................
+package com.mycom.oo.innerclasses
+
+class Counter {
+    init {
+        println("Counter [Outer class]")
+    }
+
+    //Nested class
+    class Increment {
+        var i: Int = 1
+
+        init {
+            println("Increment [Nested class]")
+        }
+
+        fun incrementValue(): Int {
+            return i + 1;
+        }
+    }
+
+    //outer class method
+    fun createInner() {
+        val inc = Increment()
+        println(inc.incrementValue())
+    }
+}
+
+fun main() {
+    val counter = Counter()
+    val inner = counter.createInner()
+    //syntax 2
+    val newCounter = Counter.Increment()
+    println(newCounter.incrementValue())
+    //short cut
+    println(Counter.Increment().incrementValue())
+}
+...................................................................................
+			How innerclass can access outter class properties
+...................................................................................
+if you want to access the outer class properties via inner class, we have to declare 
+inner class as "inner" modifier.
+We have to instantiate Outer class Instance too...
+
+package com.mycom.oo.innerclasses
+
+class Comments {
+    //outer class Prop
+    private val commentType: String = "Like"
+
+    inner class Like {
+        fun getCommentType() = commentType
+    }
+
+}
+
+fun main() {
+    //println(Comments.Like().get)
+    //create instance of outer through which we have to access the inner
+    println(Comments().Like().getCommentType())
+}
+..................................................................................
+			Anonymous Inner class
+..................................................................................
+
+Objects are created without class declarations.
+In java, Anonymous inner classes are created out of "Interfaces"
+
+package com.mycom.oo.innerclasses;
+
+import java.awt.event.MouseAdapter;
+
+interface Calculator {
+    void add();
+
+    void substract();
+
+    void multiply();
+}
+
+//in order to implement
+class Math implements Calculator {
+    @Override
+    public void add() {
+        System.out.println("add");
+    }
+
+    @Override
+    public void substract() {
+        System.out.println("substract");
+    }
+
+    @Override
+    public void multiply() {
+        System.out.println("multiply");
+    }
+}
+
+interface MyMouseAdapter {
+    void mouseClicked();
+}
+
+class Window {
+    public void addMouseListener(MyMouseAdapter mouseAdapter) {
+        mouseAdapter.mouseClicked();
+    }
+}
+
+public class AnonmousInnerDemo {
+    public static void main(String[] args) {
+        Calculator calculator = new Math();
+        calculator.add();
+        calculator.multiply();
+        calculator.substract();
+
+        //Anonymous inner class pattern , reduces the explicit class declaration
+        Calculator mycalculator = new Calculator() {
+            @Override
+            public void add() {
+                System.out.println("add");
+            }
+
+            @Override
+            public void substract() {
+                System.out.println("substract");
+            }
+
+            @Override
+            public void multiply() {
+                System.out.println("multiply");
+            }
+        };
+        mycalculator.substract();
+        mycalculator.add();
+        mycalculator.multiply();
+
+        //method local anonmous inner class
+        Window window = new Window();
+
+        window.addMouseListener(new MyMouseAdapter() {
+            @Override
+            public void mouseClicked() {
+                System.out.println("Mouse Clicked");
+            }
+        });
 
 
+    }
+}
+
+Kotlin and Anonymous Inner classes:
+  Object Expressions
 
 
 
