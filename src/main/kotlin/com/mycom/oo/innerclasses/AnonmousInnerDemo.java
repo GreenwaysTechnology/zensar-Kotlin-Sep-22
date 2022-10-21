@@ -66,7 +66,7 @@ public class AnonmousInnerDemo {
         mycalculator.add();
         mycalculator.multiply();
 
-        //method local anonmous inner class
+        //method local anonymous inner class
         Window window = new Window();
 
         window.addMouseListener(new MyMouseAdapter() {

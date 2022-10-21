@@ -3935,8 +3935,246 @@ Kotlin and Anonymous Inner classes:
   Object Expressions
 
 
+Object Expressions:
+   Using Object expressions we create object of anonymous class.
+   The classes that are not explicility declared with "class" declaration.
+   Object expressions are used only one time.
+   Instance of Anonymous inner classes are also called "Anonymous" Object.
+
+expression means assignment to a variable.
+
+package com.mycom.oo.innerclasses
 
 
+fun main() {
+   //Object expression
+    var person = object {
+        //variables
+        var id = 1
+        var firstName = "Subramanian"
+        var lastName = "Murugan"
+
+        //methods
+        fun getInfo() = "$id $firstName $lastName"
+    }
+    println(person.id)
+    println(person.firstName)
+    println(person.lastName)
+    println(person.getInfo())
+}
+
+Note:
+  Kotlin does have static keyword rather than, we have "Object expressions"
+
+How to declare object expressions inside class?
+
+package com.mycom.oo.innerclasses
+
+class Employee {
+    var person = object {
+        //variables
+        var id = 1
+        var firstName = "Subramanian"
+        var lastName = "Murugan"
+
+        //methods
+        fun getInfo() = "$id $firstName $lastName"
+    }
+   
+}
+
+
+fun main() {
+    var emp = Employee()
+    println(emp.person)
+}
+..................................................................................
+			Object class declarations
+...................................................................................
+package com.mycom.oo.innerclasses
+
+//Having Static Modifier
+object Product {
+    var id = 1
+    var name = "Phone"
+    fun calculatePrice() = 10
+}
+
+fun main() {
+//    Product() //objects cant be created out of object class
+    println("Product Id ${Product.id}")
+    println("Product Name ${Product.name}")
+    println("Price ${Product.calculatePrice()}")
+
+
+}
+..................................................................................
+		Object class can inherit and override methods
+
+
+package com.mycom.oo.innerclasses
+
+open class Person {
+    open fun calculateAge() = 18
+}
+
+object Customer : Person() {
+    var name = "Subramanian"
+    override fun calculateAge(): Int {
+        return super.calculateAge() * 2
+    }
+}
+
+fun main() {
+    println(Customer.name)
+    println(Customer.calculateAge())
+}
+....................................................................................
+		 Anonymous Inner class 
+
+package com.mycom.oo.innerclasses
+
+class Message {
+    object Waring {
+        var WaringMessage = "Warning"
+    }
+}
+
+fun main() {
+    Message.Waring.WaringMessage = "new Message"
+    println(Message.Waring.WaringMessage)
+}
+
+Object Expressions vs Object Declarations
+
+1. Object expressions are executed(initalized) immediately,where they are used
+2. Object declarations are initalized lazily, when accessed for the first time.
+.....................................................................................
+			Companion Objects
+....................................................................................
+
+1.if you want to create single ton.
+2.companion objects are used to create instance of class using factory methods.
+
+Properties of the "Object class" if you want to access, You have to use notation like below
+package com.mycom.oo.innerclasses
+
+class Greetings {
+    object Factory {
+        fun createInstance():Greetings = Greetings()
+    }
+}
+
+fun main(){
+   Greetings.Factory.createInstance() //Access properties of Factory 
+}
+
+
+class Greetings {
+    companion object Factory {
+        fun createInstance(): Greetings = Greetings()
+    }
+
+    fun sayHello() = "Hello"
+}
+
+fun main() {
+    //Greetings.Factory.createInstance()
+    val greetings = Greetings.createInstance()
+    println(greetings.sayHello())
+}
+
+in order to access static members, we dont need to use the Object Name rather we can access directly.
+
+class Greetings {
+    companion object {
+        fun createInstance(): Greetings = Greetings()
+    }
+
+    fun sayHello() = "Hello"
+}
+
+fun main() {
+    //Greetings.Factory.createInstance()
+    val greetings = Greetings.createInstance()
+    println(greetings.sayHello())
+}
+..................................................................................
+			Type for companion Objects
+...............................................................................
+interface Factory<T> {
+    fun createInstance(): T
+}
+
+
+class Greetings {
+    companion object : Factory<Greetings> {
+        //fun createInstance(): Greetings = Greetings()
+        override fun createInstance(): Greetings = Greetings();
+    }
+
+    fun sayHello() = "Hello"
+}
+
+fun main() {
+    //Greetings.Factory.createInstance()
+    val greetings = Greetings.createInstance()
+    println(greetings.sayHello())
+}
+..................................................................................
+			 
+After Compilation all companion and object declarations are still instance members of enclosing class.
+
+if you want to really to keep it as static method, you annotate using @JvmStatic...
+
+
+interface Factory<T> {
+    fun createInstance(): T
+}
+
+
+class Greetings {
+
+    companion object : Factory<Greetings> {
+        //fun createInstance(): Greetings = Greetings()
+        @JvmStatic
+        override fun createInstance(): Greetings = Greetings();
+    }
+
+    fun sayHello() = "Hello"
+}
+
+fun main() {
+    //Greetings.Factory.createInstance()
+    val greetings = Greetings.createInstance()
+    println(greetings.sayHello())
+
+}
+....................................................................................
+			 Method local Anonymous Inner classes
+.....................................................................................
+package com.mycom.oo.innerclasses
+
+interface MouseAdapterNew {
+    fun mouseClicked()
+}
+class WindowMobile {
+    fun addMouseListener(mouseAdapter: MouseAdapterNew) {
+        mouseAdapter.mouseClicked()
+    }
+}
+
+
+fun main(){
+    //method local anonmous inner class
+    val window = WindowMobile()
+
+    window.addMouseListener(object : MouseAdapterNew {
+        override fun mouseClicked() {
+            println("Mouse Clicked")
+        }
+    })
+}
 
 
 
