@@ -4030,7 +4030,7 @@ fun main() {
     println(Customer.calculateAge())
 }
 ....................................................................................
-		 Anonymous Inner class 
+		    Anonymous Inner class 
 
 package com.mycom.oo.innerclasses
 
@@ -4175,24 +4175,632 @@ fun main(){
         }
     })
 }
+...................................................................................
+				Scope Functions
+...................................................................................
+
+Scope functions are built in kotlin standard lib functions like toString,hashcode,equals.
+
+Scope functions primary purpose is to execute a block of code(lambda) within the context of an object.
+
+"Scope" means when you call scope functions on an object with a lambda expressions provided, it forms temporary scope, you can access the properties without its name.
+
+There are five scope functions.
+
+1.let 
+2.run
+3.with
+4.apply
+5.also
 
 
+Before Scope Functions:
+package com.mycom.oo.scopefunctions
+
+data class User(var name: String, var location: String, var points: Int) {
+    fun updateLocation(newLocation: String) {
+        location = newLocation
+    }
+
+    fun incrementPoints() {
+        points++
+    }
+}
+
+//how to access properties of data class User
+fun main() {
+    var user = User(name = "Subramanian", location = "Coimbatore", points = 10)
+    //Access the properties of data
+    println("Name ${user.name}")
+    println("location ${user.location}")
+    println("Points ${user.points}")
+    user.updateLocation("Chennai")
+    user.incrementPoints()
+    println("location ${user.location}")
+    println("Points ${user.points}")
+}
+
+Here we access the object properties using reference variable.
+
+The same property access we are going to do with scope functions
+
+..................................................................................
+package com.mycom.oo.scopefunctions
+
+data class User(var name: String, var location: String, var points: Int) {
+    fun updateLocation(newLocation: String) {
+        location = newLocation
+    }
+
+    fun incrementPoints() {
+        points++
+    }
+}
+
+//how to access properties of data class User without scope function
+//fun main() {
+//    var user = User(name = "Subramanian", location = "Coimbatore", points = 10)
+//    //Access the properties of data
+//    println("Name ${user.name}")
+//    println("location ${user.location}")
+//    println("Points ${user.points}")
+//    user.updateLocation("Chennai")
+//    user.incrementPoints()
+//    println("location ${user.location}")
+//    println("Points ${user.points}")
+//}
+/***
+ * Function Name says that name of the scope function
+ * ObjectReference says that how object properties are accessed inside scope lambda (it,this)
+ * Return value says that what is return value of scope functions values could be(object itself(this) or lambda expression)
+ *
+ * ..................................................................................
+ * Function Name    Object Reference   Return Value  isExtension Function
+ * ..................................................................................
+ * let                  it              Lambda           Yes
+ * run                  this            Lambda           yes
+ * with                 this            Lambda           No
+ * apply                this            Object           Yes
+ * also                 it              Object           Yes
+ */
+
+fun main() {
+    //let
+    var res = User(name = "Subramanian", location = "Coimbatore", points = 10).let {
+        println("Name ${it.name}")
+        println("location ${it.location}")
+        println("Points ${it.points}")
+        it.updateLocation("Chennai")
+        it.incrementPoints()
+        println("location ${it.location}")
+        println("Points ${it.points}")
+        it
+    }.let {
+        println(it.location)
+    }
+    println(res)
+
+    //run
+    val res1 = User(name = "Murugan", location = "Coimbatore", points = 23).run {
+//        println("Name ${this.name}")
+//        println("Location ${this.location}")
+//        println("Points ${this.points}")
+//        this.updateLocation("Chennai")
+//        this.incrementPoints()
+        println("Name ${name}")
+        println("Location ${location}")
+        println("Points ${points}")
+        updateLocation("Chennai")
+        incrementPoints()
+        //return curr
+        this
+    }
+    println(res1)
+    // var user1 = User(name = "Murugan", location = "Coimbatore", points = 23)
+    //with
+    //with(user1)
+    with(User(name = "Murugan", location = "Coimbatore", points = 23)) {
+        println("Name ${this.name}")
+        println("Location ${this.location}")
+        println("Points ${this.points}")
+        this.updateLocation("Chennai")
+        this.incrementPoints()
+        //return this
+        this
+    }.let {
+        println("Location ${it.location}")
+        println("Points ${it.points}")
+        it
+    }
+    //apply
+//    var newUser = User(name = "John", location = "Uk", points = 100).apply {
+////        this.name = "John Mc"
+////        this.location = "Us"
+////        this.points = 100
+//        name = "John Mc"
+//        updateLocation("US")
+//        incrementPoints()
+//    }
+
+    User(name = "John", location = "Uk", points = 100).apply {
+//        this.name = "John Mc"
+//        this.location = "Us"
+//        this.points = 100
+        name = "John Mc"
+        updateLocation("US")
+        incrementPoints()
+    }.let {
+        println(it.location)
+    }
+
+    //also
+    User(name = "James Gosling", location = "USA NY", points = 1000).also {
+        //  println(it.name)
+        it.updateLocation("USA CA")
+        it.incrementPoints()
+    }.apply {
+        println(name)
+        println(location)
+        println(points)
+    }
+    //////////////////////////////////////////////////////////////////////////////////
+
+    with("Subramanian".run {
+        uppercase()
+        trim()
+        this
+    }) {
+        println(this.length)
+    }
 
 
+}
+....................................................................................
+			  Operator Overloading
+.....................................................................................
+
+Operator overloading means we can use existing operators for different purposes
+let says
+ + operator is used to  arthimetic operations
+  10 +10 => 20 -Numerical compuation
+ + operator is used to concat two strings/ string with any other values
+
+ "hello" + "world" => "hello world" -  Concatnation
+
+in order to implement operator over loading kotlin offers a function called 
+"operator" function
+
+operator function can be member function or extension function for an Object
+
+package com.mycom.oo.operatoroverloading
+
+class Person {
+    var skills: String? = null
+    fun show() = skills
+}
+
+//extension function : operator function
+operator infix fun Person.plus(person: Person): Person {
+    var newPerson = Person()
+    newPerson.skills = this.skills + person.skills
+    return newPerson
+}
 
 
+fun main() {
+    val a: Int = 100
+    val b: Int = 200
+    //imperative style
+    // val c: Int = a + b
+    //declarative style :DSL code
+    //operator overloaded function
+    val c: Int = a.plus(b)
+
+    println("The result is $c")
+
+    var person1 = Person()
+    person1.skills = "Kotlin"
+    println(person1.show())
+
+    var person2 = Person()
+    person2.skills = "Mobile Development"
+    println(person2.show())
+
+    //coimbine two person skills via operator :
+
+    //var newSkill = person1.plus(person2)
+//    var newSkill = person1 + person2
+    var newSkill = person1 plus person2
+
+    newSkill.apply {
+        println(skills)
+    }
+
+}
+.....................................................................................
+				Generics - Collections
+.....................................................................................
+
+Why Generics?
+package com.mycom.generics
+
+data class Customer(val id: Int = 1, val name: String = "")
+data class Employee(val id: Int = 1, val name: String = "")
+
+interface CustomerRepository {
+    val isEmpty: Boolean get() = true
+    fun store(obj: Customer) {
+        //implement code how to store it
+    }
+
+    fun getById(id: Int): Customer
+}
+
+interface EmployeeRepository {
+    val isEmpty: Boolean get() = true
+    fun store(obj: Employee) {
+        //implement code how to store it
+    }
+
+    fun getById(id: Int): Employee
+}
+
+class CustomerRepositoryImpl : CustomerRepository {
+    override val isEmpty: Boolean
+        get() = super.isEmpty
+
+    override fun store(obj: Customer) {
+        super.store(obj)
+    }
+
+    override fun getById(id: Int): Customer {
+        TODO("Not yet implemented")
+    }
+}
+
+class EmployeeRepositoryImpl : EmployeeRepository {
+    override val isEmpty: Boolean
+        get() = super.isEmpty
+
+    override fun store(obj: Employee) {
+        super.store(obj)
+    }
+
+    override fun getById(id: Int): Employee {
+        TODO("Not yet implemented")
+    }
+}
+fun main() {
+    val customerRepo = CustomerRepositoryImpl()
+    println(customerRepo.isEmpty)
+    val empRepo = EmployeeRepositoryImpl()
+}
+
+in the above the functionality of the interface is remains same across multiple repositories, where code is duplicated...
+
+How to avoid code duplication?
+
+ We can have common interface and implementation class ,based on our Type like Customer,Employee,Product.
+We need kind of "common interface and class" - Generic(common)
+
+What is Generics?
+  Generics means parameterized types.
+ The idea is to allow types(Integer,Float,Char,String,Employee,Customer...) on fly.
+
+In java, you may be thinking the program to super type concept
+
+ Object o = new String
+ Object o=  new Customer
+
+ Any o = Customer()
+ Any o =Int()
+ Any o =Repository()
+
+when use program to super type , there is two big problems
+
+1.Casting issues
+2.Lack of Type Safety.
+
+Where we can apply generics?
+
+1.class/interface level 
+   You can create type safe container objects by declaring generic classes
+2.function level
+   You can apply type safety to the functions also
+   generic functions.
+
+Generic keywords:
+ <T> - symobol is used to denote the Type
+
+.
+Generic interface and class Declaration:
+package com.mycom.generics.cls
+
+data class Customer(val id: Int = 1, val name: String = "")
+data class Employee(val id: Int = 1, val name: String = "")
+
+//
+interface Repository<T> {
+    fun getById(id: Int): T
+    fun getAll(): List<T>
+}
+
+//implementation
+class GenericRepository<T> : Repository<T> {
+    override fun getById(id: Int): T {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAll(): List<T> {
+        TODO("Not yet implemented")
+    }
+}
 
 
+fun main() {
+    //customers
+    val customerRepo = GenericRepository<Customer>()
+    val customer: Customer = customerRepo.getById(1)
+
+    val employeeRepo = GenericRepository<Employee>()
+    val employee: Employee = employeeRepo.getById(3)
+}
+.....................................................................................
+			 Generic Functions
+.....................................................................................
+
+package com.mycom.generics.func
+
+data class Customer(val id: Int = 1, val name: String = "")
+data class Employee(val id: Int = 1, val name: String = "")
+
+interface Repository {
+    //Generic function
+    fun <T> getById(id: Int): T
+    fun <E> getAll(): List<E>
+}
+
+class RepositoryImp : Repository {
+    override fun <E> getAll(): List<E> {
+        TODO("Not yet implemented")
+    }
+
+    override fun <T> getById(id: Int): T {
+        TODO("Not yet implemented")
+    }
+}
+
+//Generic functions
+fun <T> getValue(value: T): T {
+    return value;
+}
+
+fun main() {
+    val repo = RepositoryImp()
+    val employees: List<Employee> = repo.getAll<Employee>()
+    val customer: Customer = repo.getById<Customer>(3)
+
+    val str: String = getValue<String>("Stringvalue")
+    val intValue: Int = getValue<Int>(13)
+}
+....................................................................................
+			  Generic Constraints -Type Restrictsions
+...................................................................................
+open class Entity(val id: Int = 0)
+class CustomerEntity : Entity()
+
+//Repository
+class Repository<T> {
+    fun save(entity: T) {
+        //biz logic 
+        if (entity.id != 0) {
+            //do something
+        }
+    }
+}
+
+Here , there is compile time error, the reason enity.id which is not present in "T"
+Type.
+
+What would be T in general?
+
+ "T" is type of "Any?"
+
+Since T is type of "Any?", generally property "id" would not avaiable in "Any" Type.
+
+How to fix this problem?
+  Generics Constraints.
+
+You can tell the type of "T" is Something.
+
+<T:Something> -Here T is not Any? rather T is type of "Something".
 
 
+package com.mycom.generics.constraints
 
 
+open class Entity(val id: Int = 0)
+class CustomerEntity : Entity()
+
+//Repository
+//here T is Type of "Any?"
+class Repository<T : Entity> {
+    fun save(entity: T) {
+        //biz logic
+        if (entity.id != 0) {
+            //do something
+        }
+    }
+}
 
 
+fun main() {
+    val repo = Repository<CustomerEntity>()
+    repo.save(CustomerEntity())
+}
+....................................................................................
+			What if i want multiple Restrictions on Single Type
+.....................................................................................
+
+package com.mycom.generics.constraints
+
+import java.io.Serializable
+
+open class Entity(val id: Int = 0)
+class CustomerEntity : Entity(), Serializable
+
+//Single Restriction The class has only Entity Restrictions
+//here T is Type of "Any?"
+class Repository<T : Entity> {
+    fun save(entity: T) {
+        //biz logic
+        if (entity.id != 0) {
+            //do something
+        }
+    }
+}
+
+//multiple Restrictions
+class GenericRepository<T> where T : Entity, T : Serializable {
+    fun save(entity: T) {
+        if (entity.id != 0) {
+            //do something
+        }
+    }
+}
 
 
+fun main() {
+    val repo = Repository<CustomerEntity>()
+    repo.save(CustomerEntity())
+
+    val multi = GenericRepository<CustomerEntity>()
+}
+....................................................................................
+			Generics and Invariance
+		       (Super Type and Sub Types)
+....................................................................................
+
+Without Generics Program to Super Type:
+.......................................
+
+package com.mycom.generics.variance
+
+open class Person
+
+//Employee is SubType of Person
+class Employee : Person()
+
+//function which populates the objects
+fun operate(person: Person) {
+    //some logic to operate on instances
+}
+
+fun main() {
+    //program to Super Type
+    val person: Person = Person()
+    operate(person) // valid
+    val employee: Employee = Employee()
+    operate(employee)
+}
+
+In this code Employee is valid type because it is "subtype" of Person
+
+more Eg in java:
+  
+ Object  obj = new Object()
+ Integer ints= new Integer(10)
+ obj = ints //ok
+....................................................................................
+
+eg:
+package com.mycom.generics.variance
+
+open class Person
+
+//Employee is SubType of Person
+class Employee : Person()
+
+//function which populates the objects
+fun operate(person: Person) {
+    //some logic to operate on instances
+}
+
+class Box<T> {
+    fun add(n: T) {
+        //some code
+    }
+}
 
 
+fun main() {
+    //program to Super Type
+    val person: Person = Person()
+    operate(person) // valid
+    val employee: Employee = Employee()
+    operate(employee)
+    //
+    val box = Box<Number>()
+    val x: Int = 10
+    box.add(x)
+    val y: Double = 10.89
+    box.add(y)
+}
+
+
+List<String> str = new ArrayList<String>()
+List<Object> obj= str;
+
+
+Kotlin and Program to Super Type:
+
+Declaration site variance:
+ out,in - keywords
+
+package com.mycom.generics.variance
+
+interface ReadOnly<out T> {
+    fun get(id: Int): T
+    fun getAll(): List<T>
+}
+
+class ReadOnlyImp<out T> : ReadOnly<T> {
+    override fun get(id: Int): T {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAll(): List<T> {
+        TODO("Not yet implemented")
+    }
+}
+
+fun operate(person: List<Person>) {
+
+}
+
+//co variant : only out
+class Producer<out T>(val value: T) {
+    fun get(): T {
+        return value
+    }
+}
+
+//contra varient : only in
+class Consumer<in T> {
+    fun save(value: T): String {
+        return value.toString()
+    }
+}
+
+fun main() {
+    operate(listOf(Person()))
+    operate(listOf(Employee()))
+    println(Producer<String>("Hello").get())
+    println(Consumer<String>().save("hi"))
+}
+....................................................................................
+				Collections
+....................................................................................
 
 
 
