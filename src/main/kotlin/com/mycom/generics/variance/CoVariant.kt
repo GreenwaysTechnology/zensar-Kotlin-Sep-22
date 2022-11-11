@@ -24,6 +24,10 @@ class Producer<out T>(val value: T) {
     fun get(): T {
         return value
     }
+
+//    fun save(value: T) {
+//
+//    }
 }
 
 //contra varient : only in

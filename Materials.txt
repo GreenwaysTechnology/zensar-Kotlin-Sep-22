@@ -4802,50 +4802,1429 @@ fun main() {
 				Collections
 ....................................................................................
 
+Kotlin and data structure:
+
+Kotlin supports multiple datastructure like java.
+
+Array:
+ It is fundamental datastructure.
+ Array is object 
+ Array is static
+ Arry can take primitives and objects
+
+
+Kotlin and Arrays:
+In kotlin Array is  Object represented by "Array" class
+It has setters and getters - set and get functions
+It has size properties.
+Array is invariant - means Array<String> not allowed Array<Any>
+
+Primitive Arrays:
+IntArray
+ShortArray
+ByteArray
+
+
+Array Object creation:
+
+1.using factory functions
+  intArrayOf()
+
+2.Using Constructructor functions
+  IntArray(5)
+
+package com.mycom.datastructure.arrays
+
+fun main() {
+    //int array
+    //factory function with type
+    var myIntArray: IntArray = intArrayOf(1, 2, 3, 4, 5, 6, 7)
+    println(myIntArray.get(0))
+    myIntArray.iterator().forEach { println(it) }
+
+    //constructor
+    var strArray = Array(3, { i -> "hello ${i}" })
+    strArray.iterator().forEach { println(it) }
+
+    //generic function
+    val courses = arrayOf<String>("Kotlin", "Java", "scala", "Groovy")
+    courses.iterator().forEach { println(it) }
+}
+.....................................................................................
+          Dynamic Array: Dynamic data structure: Collections
+.....................................................................................
+
+Kotlin collections has been built on the top of Java collections.
+
+Java collections(kotlin) can be 
+
+1.List
+  Ordered collection 
+      with elements by index.
+      with elements by hashcode
+      with by insertion  order
+
+2.Set
+    Collection 
+       with unique elements -No duplicates
+       order is dertermined by natural order of the elements
+
+3.Map
+      set of Key-value pairs
+     keys are unique,each of them maps exactly one value
+  
+Collection Types:
+.................
+
+1.readonly collection-immutable collections
+2.Mutable collection -   with readonly collection with write operations - add,remove,update its elements.
+
+How to create mutable collections?
+package com.mycom.datastructure.collections
+
+fun main() {
+    var list = mutableListOf<Int>(1, 2, 3)
+    list.forEach(::println)
+    list.add(4)
+    list.add(5)
+    list.forEach(::println)
+
+    //scope
+    mutableListOf<Int>(1, 2, 3, 4).apply {
+        //add selgement
+        add(5)
+        add(6)
+    }.apply {
+        println("Before Sorting")
+        forEach(::println)
+    }.apply {
+        sortByDescending { it }
+    }.let {
+        println("Sorting Desending Order")
+        it.forEach(::println)
+    }
+
+    //set
+    println("Set....")
+    mutableSetOf<Int>(1, 2, 3, 4).apply {
+        //add selgement
+        add(5)
+        add(6)
+        add(5)
+        add(6)
+        add(3)
+        add(1)
+    }.let {
+        println("Set Printing")
+        it.forEach(::println)
+    }
+}
+..............................................................................
+				Map
+................................................................................
+
+package com.mycom.datastructure.collections
+
+//mutable map
+fun main() {
+    mutableMapOf<String, Int>("value1" to 100, "value2" to 200).apply {
+        values.forEach(::println)
+        keys.forEach(::println)
+    }
+}
+....................................................................................
+				Collection Processing
+..................................................................................
+
+Collection transformation
+Collection Filtering
+Collection grouping
+
+package com.mycom.datastructure.collections
+
+//transformation
+fun transform() {
+    //list of numbers
+    listOf<Int>(1, 2, 3, 4, 5).let {
+        it.forEach(::println)
+        it
+    }.let {
+        //double the elements
+        it.map { it * 2 }
+    }.let {
+        println(".....")
+        it.forEach(::println)
+    }
+}
+
+fun filter() {
+    listOf<Int>(10, 34, 2, 3, 5, 78, 9, 0, 1).let {
+        it.filter { it % 2 == 0 }
+    }.let {
+        it.forEach(::println)
+    }
+}
+
+
+fun main() {
+    //transform()
+    filter()
+}
+...................................................................................
+				Meta Programming
+				    &
+                                Dynamic Programming
+...................................................................................
+
+What is dynamic programming and Meta Programming?
+
+ Dynamic programming is a feature through which we can alter or interospect runtime nature of programming.
+ Meta programming is all about program about program
+
+Implementations:
+ Runtime meta programming is implemented in two ways
+ 1.Extension property, Extension function
+ 2.Reflection
+
+Reflection:
+  Reflection is set of language and lib features that allows us to introspect the structure of programm at run time.
+What you can interospect?
+ You can interospect properties,functions,constructors,class,interfaces.
+
+eg:
+  The property data type
+  The function args and its return type
+
+in order to implement reflection in kotlin, kotlin core language does not provide feature.
+we need to include a lib/jar in pom.xml 
+
+    <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+
+Kotlin is 100% compatiable with java code, kotlin can communicate with java systems.
+From Kotlin , you can get all java related apis via relfection.
+
+
+1.java reflection
+2.kotlin reflection
+
+
+when you write reflection, if you want get information about class, you have to get the reference of class.
+
+
+In java , all refelection meta data is stored inside a class called "java.lang.Class"
+ -Meta Class.
+
+class A {} - new A() ---> class Class{}
+
+A::class => meta class 
+
+Eg:
+package com.mycom.metaprogramming
+
+import java.lang.reflect.Type
+
+class Transaction(val id: Int, val amount: Double, var description: String = "Default Value") {
+    fun valdiate() {
+        if (amount > 10000) {
+            println("Transaction is too large")
+        }
+    }
+}
+
+fun intertospectInstance(obj: Any) {
+    println("Class ${obj.javaClass.simpleName}")
+    println("properties \n ")
+    obj.javaClass.declaredFields.forEach { println(" name ${it.name} ${it.type.simpleName}") }
+    println("Functions \n")
+    obj.javaClass.declaredMethods.forEach {
+        println("${it.name} ${it.returnType.simpleName}")
+    }
+}
+fun getType(obj:Type){
+    println(obj.typeName)
+}
+
+fun main() {
+    intertospectInstance(Transaction(1, 200.00, "A simple Transaction"))
+    getType(Transaction::class.java)
+}
+.....................................................................................
+Kotlin Reflection:
+package com.mycom.metaprogramming
+
+import kotlin.reflect.KClass
+import kotlin.reflect.full.memberProperties
+
+fun getKotlinType(obj: KClass<*>) {
+    println(obj.qualifiedName)
+}
+
+fun main() {
+    //class info
+    val classInfo = Transaction::class
+    classInfo.memberProperties.forEach {
+        println("Property ${it.name} of type ${it.returnType}")
+    }
+    classInfo.constructors.forEach {
+        println("Constructor ${it.name} -  ${it.parameters}")
+    }
+    // constructor
+    val constructor = ::Transaction
+    println(constructor)
+    //grab information from the constructor function
+    println(constructor.parameters.first { it.name == "id" })
+
+    //kotlin classes are instance of KClass<*>
+    getKotlinType(Transaction::class)
+}
+.................................................................................
+			 Annotation
+..................................................................................
+Annotation are means of attaching metadata to the code.
+metadata can be attached during compiling time,during runtime, during source code level
+
+in kotlin how to create annotations -custom annotations
+and also
+kotlin offers lot of built in anntations.
+
+How to declare annotation? and How to use?
+
+package com.mycom.metaprogramming
+
+//declare annotations
+
+annotation class Table(val name: String = "")
+
+@Table(name = "contactTable")
+data class Contact(val id: Int, val name: String, val email: String)
+
+fun main() {
+
+}
+
+///
+Annatations attributes:
+
+@Target
+  Where we can use this annoation 
+  class,functionproperties,expression
+@Rention
+  The policy up to where it is available
+   -class file,during time
+ 
+ package com.mycom.metaprogramming
+
+import kotlin.reflect.full.memberProperties
+
+//declare annotations
+
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Table(val name: String = "")
+
+//property level annotation
+@Target(AnnotationTarget.PROPERTY)
+annotation class Field(val name: String)
+
+
+@Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY, AnnotationTarget.FUNCTION)
+annotation class Greeter
+
+@Table(name = "contactTable")
+@Greeter
+data class Contact(val id: Int, @Field(name = "Name") val name: String, val email: String)
+
+
+//@Table()
+@Greeter
+fun save() {
+
+}
+
+fun main() {
+    Contact::class.annotations.find {
+        println(it.annotationClass.simpleName)
+        it.annotationClass.memberProperties.forEach {
+            println(it.name)
+        }
+        it.annotationClass.simpleName == "Table"
+    }
+
+}   	
+...................................................................................
+				Delegation
+.................................................................................
+What is delegation?
+
+ Delegation is one the oo design pattern that allows object composition to achive code resue.
+ In delegation design pattern a object handles a request by delegating to a second object(delegate).
+
+ Delegation design pattern helps for loosly coupled programming.
+
+In java like object oriented programming, the delegation design pattern has to be implemented from begining.
+
+Kotlin provides nice abstraction for delegation design pattern. in kotlin you dont need to foucs how to implement design pattern rather you can write biz logic....
+
+delegation is abstracted by a keyword "by"
+
+package com.mycom.oo.dynamicprogramming.delegations
+
+interface Downloader {
+    fun download()
+}
+
+interface Player {
+    fun play()
+}
+
+class FileDownloader(val fileName: String) : Downloader {
+    override fun download() {
+        println("$fileName is downloaded")
+    }
+}
+
+class FilePlayer(val fileName: String) : Player {
+    override fun play() {
+        println("$fileName is playing")
+
+    }
+}
+
+class MediaFile(private val downloader: Downloader, private val player: Player) : Downloader, Player {
+    override fun download() {
+        downloader.download()
+    }
+
+    override fun play() {
+        player.play()
+    }
+}
+
+fun main() {
+   val mediaFile= MediaFile(FileDownloader("movie.mp4"), FilePlayer("movie.mp4"))
+    mediaFile.download()
+    mediaFile.play()
+}
+...........................................................................
+package com.mycom.oo.dynamicprogramming.delegations
+
+interface Downloader {
+    fun download()
+}
+
+interface Player {
+    fun play()
+}
+
+class FileDownloader(val fileName: String) : Downloader {
+    override fun download() {
+        println("$fileName is downloaded")
+    }
+}
+
+class FilePlayer(val fileName: String) : Player {
+    override fun play() {
+        println("$fileName is playing")
+
+    }
+}
+
+//class MediaFile(private val downloader: Downloader, private val player: Player) : Downloader, Player {
+//    override fun download() {
+//        //delegating the responsibility to Delegating
+//        downloader.download()
+//    }
+//
+//    override fun play() {
+//        player.play()
+//    }
+//}
+
+class MediaFile(private val downloader: Downloader, private val player: Player) : Downloader by downloader,
+    Player by player {
+
+}
+
+fun main() {
+    val mediaFile = MediaFile(FileDownloader("movie.mp4"), FilePlayer("movie.mp4"))
+    mediaFile.download()
+    mediaFile.play()
+}
+...
+Delegation Properties:
+package com.mycom.oo.dynamicprogramming.delegations
+import kotlin.reflect.KProperty
+
+class Student {
+    var firstName: String? by NameDelegate()
+    var lastName: String? by NameDelegate()
+
+    override fun toString(): String {
+        return "$firstName $lastName"
+    }
+}
+
+class NameDelegate {
+    var formattedValue: String? = null
+
+    operator fun setValue(
+        thisRef: Any?,
+        property: KProperty<*>,
+        value: String?
+    ) {
+        if (value != null && value.length > 5) {
+            formattedValue = value.trim().toUpperCase()
+        }
+    }
+
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): String? {
+        return formattedValue
+    }
+}
+
+fun main() {
+    val student = Student()
+    student.firstName = "Subramanian"
+    student.lastName = "Murugan"
+    println(student)
+}
+Built in delegates:
+package com.mycom.oo.dynamicprogramming.delegations
+import kotlin.properties.Delegates
+
+class StudentHeavy {
+    init {
+        println("Student Heavy Initialized")
+    }
+}
+
+class Student {
+    val heavy by lazy { StudentHeavy() }
+
+    var marks: Int by Delegates.observable(50) { property, oldValue, newValue ->
+        println("Old Value $oldValue")
+        println("New Value $newValue")
+    }
+
+    var age: Int by Delegates.vetoable(14){ property, oldValue, newValue ->
+        println("New Age $newValue")
+        println("Old Age $oldValue")
+        newValue >= 14
+    }
+}
+
+fun main() {
+    val student = Student()
+//    student.marks = 70
+//    student.marks = 80
+
+    student.age = 13
+    println(student.age)
+    student.age = 12
+    println(student.age)
+    student.age = 15
+    println(student.age)
+
+}
+.....................................................................................
+				Asynchronous Programming
+				   (Non Blocking)
+.....................................................................................
+
+What is Synchronous Programming or Blocking?
+
+How Programms are getting executed?
+ Process
+Every Process powered multi threading.
+
+Every program is executed by a thread by default.
+
+if you take java programs, are executed by a thread "main" thread.
+
+Programm
+main(){
+ 1.task-1 -method -is being executed
+ 2.task-2 -method
+ 3.task-3 -method
+ 4.task-N -method
+}
+
+Blocking:
+ when task-1 is running long time because of "IO Or CPU intensive task"
+ task-2,task-3,task-4...keep on waiting - This is called as blocking
+
+What will happen when you block a thread?
+
+=>You cant run other tasks
+=>if a thread is blocked long time, "resource" would be waste
+
+Solutions:
+
+1.Why cant run application concurrently(parrell)
+ Each task can be executed in a separate thread of execution, so that main thread will not be blocked.
+
+Based on this arch only,Web servers are working, Web Servers was designed based on this arch.
+                   "Request Per Thread Model"
+
+This model introduces mutli threading approach.
+
+In 2000, Community identified the problem with this arch.
+
+Drawbacks:
+1.if more threads, os need to do context switch.
+2.Threads are not cheapier, when a thread is created, it takes small amount of memory
+  which may take up to 5mb
+3.thread dead locks
+4.starvation
+etc....
+
+Solution for multi threading Blocking Model:
+
+1.Non blocking arc /Async 
+  
+A.Having limitied no of threads with max concurrency
+
+                      "Non Blocking io apis"
+
+Evented IO / Event Driven Programming model
+
+How to limit by reducing threads, achiving more concurrency.
+.....................................................................................
+			How to implement nonblocking arch
+.....................................................................................
+
+Requirments:
+............
+
+Level -1
+
+0.Operating System should support non blocking apis
+1.Application run time(JVM) should support low level non blocking apis like select,poll,epoll apis.
+2.Java 7, introduced non blocking apis via "nio" package.
+
+Level- 2
+ How to invoke nonblocking apis?
+     language/framework provides high level apis
+ 
+How to handle results/events submitted by kernal?
+    
+1.callbacks /listeners
+  A function/method which is registered for an event, as soon as event is submitted
+by kernal this function gets notified, which is pushed into stack and handles results.
+   
+2.Futures,Promises
+  Futures and Promises are objects which abstracts away callback programming.
+  in order to avoid callback hell.
+
+3.Rx
+  The advanced programming model which handles events and streams.
+
+Coroutines:
+ What is Co routines?
+
+Co means - Cooperative
+Routines (sub) - Procedure / sub Procedure/functions/methods
+
+Cooperative functions:
+    functions are communicated.
+
+Coroutines are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed
+
+How functions cooperate without each other? normal function call
+
+AFunction(){                               AFunction(){
+                                               1.
+					       2.
+  AnonterFunction() --------------->	       3.
+					       return
+}                                         }
+
+Another function will return only, when all the task(1,2,3,4...) is completed
+
+How functions cooerate with each other? - Cooperative functions(co coutines)
+............................................................................
+
+AFunction(){                               AFunction(){
+                                               1.
+					         // I am done for you ,you continue
+  AnonterFunction() --------------->	       
+  					   <--------
+   ok,i will do something                    					
+   i am done for you, you start ------------------>  
+						2.
+						  //start 2nd task
+						Complete and Return
+}     
+
+Durating cooperation even we can pass values too.
+
+.....................................................................................					callbacks
+
+api--returns result--based on result --- i want to call another api---again another api. - callback nesting - async composition.
+
+getUser(user->{
+   login(user,status->{
+	dashboard(page->{})
+  })
+})
+callback hell:
+   callback hell is way of writing async program using callbacks.
+   When we compose async ,using callbacks, it is very difficult to debug,scale,understand,maintain code.
+
+How to solve callback hell?
+  using simple code patterns
+
+Code should be like sync work flow, but it should be async
+
+fun  loadData(){
+  val data = networkRequest() 
+  val newData =anotherRequest(data) 
+}
+...................................................................................
+				Coroutines Coding side
+.....................................................................................
+
+How to schedule task in background?
+
+ Using Threads
+ Using coroutines
+
+package com.mycom.coroutines
+
+import kotlin.concurrent.thread
+
+fun delay() {
+    println("Delay task")
+    println("Delay task is running at  ${Thread.currentThread().name}")
+
+}
+
+fun main() {
+    println("Main Program starts ${Thread.currentThread().name}")
+    //schedule the task in a separate of execution
+   thread(name = "My Thread",) {
+       delay()
+   }
+}
+...............................................................................
+How to schedule the task using coroutines?
+
+Create Coroutines?
+  we have apis - Co-routine Builders
+  1.lanuch
+  2.async
+  3.runBlocking
+
+
+pom.xml
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+suspend fun mydelay() {
+    println("My delay runs in  ${Thread.currentThread().name}")
+}
+
+fun main() {
+    println("Main Program starts ${Thread.currentThread().name}")
+    //run the task in separate thread of execution using coroutines
+//    val scope = GlobalScope
+//    scope.launch(Dispatchers.Default) {
+//        mydelay()
+//    }
+    GlobalScope.launch {
+        mydelay()
+    }
+    Thread.sleep(5000)
+}
+.....................................................................................
+How to lanuch coroutine?
+ like thread
+
+thread.start()----->
+GlobalScope.lanuch	
+
+GlobalScope:
+object GlobalScope : CoroutineScope
+A global CoroutineScope not bound to any job. Global scope is used to launch top-level coroutines which are operating on the whole application lifetime and are not cancelled prematurely.
+
+
+CoroutineScope:
+  This is top level 
+Defines a scope for new coroutines. Every coroutine builder (like launch, async, etc.) is an extension on CoroutineScope and inherits its coroutineContext to automatically propagate all its elements and cancellation.
+
+The best ways to obtain a standalone instance of the scope are CoroutineScope() and MainScope() factory functions, taking care to cancel these coroutine scopes when they are no longer needed (see section on custom usage below for explanation and example).
+
+...
+Use case: how to lanuch a coroutine?
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+fun main() {
+   println("Main Program starts ${Thread.currentThread().name}")
+   GlobalScope.launch {
+       //all async task
+       println("Background threads starts ${Thread.currentThread().name}")
+
+   }
+    println("Main Program ends ${Thread.currentThread().name}")
+
+}
+Here , main thread finishes its job before coroutine finishes.
+we need to pause the main thread until , co routine finishes
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+fun main() {
+   println("Main Program starts ${Thread.currentThread().name}")
+   GlobalScope.launch {
+       //all async task
+       println("Background threads starts ${Thread.currentThread().name}")
+
+   }
+    println("Main Program ends ${Thread.currentThread().name}")
+  Thread.sleep(5000)
+}
+.................................................................................
+				How to delay coroutine
+
+We can simulate the delay using Thread.sleep method.
+package com.mycom.coroutines
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+fun main() {
+    println("Main Program starts ${Thread.currentThread().name}")
+    GlobalScope.launch {
+        //all async task
+        println("Background threads starts ${Thread.currentThread().name}")
+        //delay simulatation
+        Thread.sleep(6000)
+        println("Background threads ends ${Thread.currentThread().name}")
+
+
+    }
+    println("Main Program ends ${Thread.currentThread().name}")
+    Thread.sleep(5000)
+}
+
+Here you can look at the coroutine takes more delay, than main thread, main thread finishes its job , but still coroutine thread still executes..
+....................................................................................
+			coroutine and Thread.sleep method
+....................................................................................
+if you want to schedule delay task,dont use Thread.sleep , because this blocks the thread where ever. here Thread.sleep blocks the main thread.
+
+suspend maker:suspend function:
+...............................
+supend functions are function which controls execution of async task.
+suspend functions will have async task.
+
+suspend fun delay(timeMillis: Long)
+
+Delays coroutine for a given time without blocking a thread and resumes it after a specified time.
+
+This suspending function is cancellable. If the Job of the current coroutine is cancelled or completed while this suspending function is waiting, this function immediately resumes with CancellationExcepti
+
+package com.mycom.coroutines
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+fun main() {
+    println("Main Program starts ${Thread.currentThread().name}")
+    GlobalScope.launch {
+        //all async task
+        println("Background threads starts ${Thread.currentThread().name}")
+        //delay simulatation
+       // Thread.sleep(4000)
+        delay(4000)
+        println("Background threads ends ${Thread.currentThread().name}")
+
+
+    }
+    println("Main Program ends ${Thread.currentThread().name}")
+    Thread.sleep(5000)
+}
+
+Note:
+Suspend function 'delay' should be called only from a coroutine or another suspend function
+
+package com.mycom.coroutines
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+fun main() {
+    println("Main Program starts ${Thread.currentThread().name}")
+    GlobalScope.launch {
+        //all async task
+        println("Background threads starts ${Thread.currentThread().name}")
+        //delay simulatation
+       // Thread.sleep(4000)
+        delay(4000)
+        println("Background threads ends ${Thread.currentThread().name}")
+
+
+    }
+    println("Main Program ends ${Thread.currentThread().name}")
+   // Thread.sleep(5000)
+    //delay(100) //error : cant be called
+}
+.....................................................................................
+
+How coroutine thread and main thread(UI) Can Co-operate without using Thread.sleep?
+
+I have to pause the main thread(UI) thread, until the co routine completes its tasks.
+		   
+There is builder function.
+ runBlocking
+
+expect fun <T> runBlocking(context: CoroutineContext = EmptyCoroutineContext, block: suspend CoroutineScope.() -> T): T
+    
+     Runs a new coroutine and blocks the current thread until its completion. This function should not be used from a coroutine. It is designed to bridge regular blocking code to libraries that are written in suspending style, to be used in main functions and in tests.
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+fun main() {
+    runBlocking {
+        println("Main Program starts ${Thread.currentThread().name}")
+        GlobalScope.launch {
+            //all async task
+            println("Background threads starts ${Thread.currentThread().name}")
+            //delay simulatation
+            delay(4000)
+            println("Background threads ends ${Thread.currentThread().name}")
+        }
+        println("Main Program ends ${Thread.currentThread().name}")
+    }
+}
+...............................................................................
+		How to encasulate delay logic into separate function
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+fun main() {
+    runBlocking {
+        println("Main Program starts ${Thread.currentThread().name}")
+        GlobalScope.launch {
+            //all async task
+            println("Background threads starts ${Thread.currentThread().name}")
+            sleep(2000)
+        }
+        println("Main Program ends ${Thread.currentThread().name}")
+    }
+}
+
+suspend fun sleep(timer: Long = 100) {
+    delay(timer)
+}
+....................................................................................
+Coroutine Builders
+
+It is function that help us to create a coroutine,
+The can be called from the normal functions because they do not supend them seleves.
+
+1.launch
+2.runBlocking
+3.async
+
+1.lanuch
+  start new coroutine in the background and keep working...
+  lanuch returns Job Object
+2.runBlocking
+    Blocks the current thread and waits for the the other coroutine to finish its execution
+3.async
+  perform async operation and return a defered Object
+  Which is eq to Promise Object in js
+  We can call "await" on the Defered Value in order to wait and get the result.
+...............................................................................
+			lanuch and Job
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.*
+
+fun main() {
+    runBlocking {
+        val job: Job = GlobalScope.launch {
+            //all async task
+            println("hello")
+            sleep(2000)
+            println("world")
+        }
+        job.join()
+        println("greet")
+    }
+}
+...................................................................................
+			Compare Threads and CoRoutines
+..................................................................................
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.concurrent.thread
+
+
+fun main() {
+    repeat(1000000) {
+        thread(name = "mythread") {
+            Thread.sleep(5000)
+            println('*')
+        }
+    }
+
+}
+if you run this code, you will get  out-of-memory error...
+
+The same code if you write using coroutines, it will not
+package com.mycom.coroutines
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.concurrent.thread
+
+
+fun main() {
+    //thread based code
+//    repeat(1000000) {
+//        thread(name = "mythread") {
+//            Thread.sleep(5000)
+//            println('*')
+//        }
+//    }
+    runBlocking {
+        repeat(100000) {
+           val job= GlobalScope.launch {
+                delay(5000)
+                println("*")
+            }
+            job.join()
+
+        }
+
+    }
+
+}
+.....................................................................................
+			How to lanuch more coroutines ?
+
+package com.mycom.coroutines
+
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.concurrent.thread
+
+
+fun main() {
+    runBlocking {
+       val job1 = GlobalScope.launch {
+           println("Coroutine-1 Thread ${Thread.currentThread().name}")
+            delay(5000)
+            println("*")
+        }
+        job1.join() // joins on to the main thread
+
+        val job2 = GlobalScope.launch {
+            println("Coroutine-2 Thread ${Thread.currentThread().name}")
+            delay(5000)
+            println("*")
+        }
+        job2.join()
+
+    }
+}
+....................................................................................
+		How to cancel Coroutine and How to enable time outs
+
+In long running application you might need fine-grained control on your background coroutines.
+for eg: user might have closed the page that lanuched a coroutine and still it is running. and also its result is no longer needed and it has to be cancelled.
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.*
+
+fun main() {
+    runBlocking {
+        val job = GlobalScope.launch {
+            repeat(1000) {
+                println("Job: i am sleeping $it")
+                delay(500L)
+            }
+        }
+        delay(1300L)
+        println("main: i am tried of waiting!")
+//        job.cancel()
+//        job.join()
+        job.cancelAndJoin()
+        println("main : now I can be happy ,good bye")
+    }
+}
+.....................................................................................
+			   Timeouts
+....................................................................................
+if you dont to run the coroutine beyond the time you expect.
+lets say i want to run coroutine within 2000ms, beyond it ,cancel the coroutine.
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
+
+fun main(){
+    runBlocking {
+        withTimeout(1500L) {
+            //CODE should execute within 1500
+            repeat(1000){
+                println("i $it")
+                delay(500)
+            }
+        }
+    }
+}
+output:
+i 0
+i 1
+i 2
+Exception in thread "main" kotlinx.coroutines.TimeoutCancellationException: Timed out waiting for 1500 ms
+	at kotlinx.coroutines.TimeoutKt.TimeoutCancellationException(Timeout.kt:186)
+	at kotlinx.coroutines.TimeoutCoroutine.run(Timeout.kt:156)
+	at kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask.run(EventLoop.common.kt:497)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:274)
+	at kotlinx.coroutines.DefaultExecutor.run(DefaultExecutor.kt:69)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+
+
+if i dont want exception.
+
+       val result = withTimeoutOrNull(1500L) {
+            repeat(1000) {
+                println("i $it")
+                delay(500)
+            }
+        }
+        println("Result is $result")
+
+....................................................................................
+			 async builder
+
+
+Creates a coroutine and returns its future result as an implementation of Deferred.
+async and lanuch is similar - to launuch new cocourtine but the difference is async can return values.
+
+fun <T> CoroutineScope.async(
+    context: CoroutineContext = EmptyCoroutineContext, 
+    start: CoroutineStart = CoroutineStart.DEFAULT, 
+    block: suspend CoroutineScope.() -> T
+): Deferred<T>
+
+What is Deferered?
+interface Deferred<out T> : Job
+Deferred value is a non-blocking cancellable future — it is a Job with a result.
+
+abstract suspend fun await(): T
+Awaits for completion of this value without blocking a thread and resumes when deferred computation is complete, returning the resulting value or throwing the corresponding exception if the deferred was cancelled.
+
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.*
+
+fun main() {
+    runBlocking {
+        val result: Deferred<String> = async {
+            println("Hello async")
+            delay(1000L)
+            //return value: value can be any type
+            "Hello,How are you?"
+        }
+        //get value
+        result.join()
+        println("Value Got From the Coroutine ${result.await()}")
+    }
+}
+...................................................................................
+			    Composition
+
+Sequentional Compostion
+concurrent using async
+Lazily started 
+...................................................................................
+				Sequentional Compostion
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.delay
+
+fun main() {
+
+}
+suspend fun getValueOne():Int {
+    delay(1000)
+    return 10
+}
+suspend fun getValueTw0():Int {
+    delay(1000)
+    return 20
+}
+what if i want to compute these values sequential
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
+
+@OptIn(ExperimentalTime::class)
+fun main() {
+    runBlocking<Unit> {
+        //measure the time taken for execution of all coroutines
+        val time = measureTime {
+            val task1 = getValueOne()
+            val task2 = getValueTwo()
+            println("The answer is ${task1 + task2}")
+        }
+        println("Time taken for all tasks is $time")
+    }
+}
+
+suspend fun getValueOne(): Int {
+    delay(1000)
+    return 10
+}
+
+suspend fun getValueTwo(): Int {
+    delay(1000)
+    return 20
+}
+
+output:
+
+The answer is 30
+Time taken for all tasks is 2.010743600s
+.....................................................................................
+				async Composition
 
 
 
+package com.mycom.coroutines
+
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
+
+@OptIn(ExperimentalTime::class)
+fun main() {
+    runBlocking<Unit> {
+        //measure the time taken for execution of all coroutines
+        val time = measureTime {
+            val task1 = async { getValueOne() }
+            val task2 = async { getValueTwo() }
+            println("The answer is ${task1.await() + task2.await()}")
+        }
+        println("Time taken for all tasks is $time")
+    }
+}
+
+The answer is 30
+Time taken for all tasks is 1.027616400s
+....................................................................................
+			How to start coroutine Lazily
+....................................................................................
+Any coroutine is started execution immediatly as soon as it is lanuched.
+
+if i want to start based on some activity like clicking the button, changing tabs..
+
+async work flow to be triggered either you call "start / await"
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.*
 
 
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
+
+@OptIn(ExperimentalTime::class)
+fun main() {
+    runBlocking<Unit> {
+        //measure the time taken for execution of all coroutines
+        val time = measureTime {
+            val task1 = async(start = CoroutineStart.LAZY) { getValueOne() }
+            val task2 = async(start = CoroutineStart.LAZY) { getValueTwo() }
+
+            launch {
+                delay(5000L)
+                task1.start()
+                task2.start()
+                println("The answer is ${task1.await() + task2.await()}")
+
+            }
+        }
+        println("Time taken for all tasks is $time")
+    }
+}
+...................................................................................
+		   Reactive Programming style like implementation
+			Async Streaming and Event Publishing
+			    Channels and Flows
+...................................................................................
+
+Channels are way to transmit "Defered  Single Value" between Coroutines
+Flows are way to transmit  "Defered Sequence of(more) values" between Coroutines
+
+Channels are simple BlockingQueue, the difference between BlockingQueue and Channel
+
+Put method is eq to suspend send method
+take method is eq to suspend receive method.
+
+package com.mycom.coroutines
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+
+fun main() {
+    runBlocking {
+        //create a channel
+        val channel = Channel<Int>()
+        //send data async
+        launch(Dispatchers.Default) {
+            //publish data inside one coroutine
+            println("Publishing in ${Thread.currentThread().name}")
+            for(i in 10 downTo 0) channel.send(i)
+        }
+        launch(Dispatchers.IO) {
+            //recevie data inside another coroutine
+            println("Receiving ${Thread.currentThread().name}")
+            for (j in channel) println("downloading $j")
+        }
+    }
+}
+..................................................................................
+		  Streaming- Multi Value Exchanging between
+			  Coroutines
+                      (Emit and Collect)
+...................................................................................
+What is Flow?
+ A suspend function can return a single value, but what if i want to return multiple 
+asynchronously computed values (sequennce of values)?
+     That is where The Flow comes into picture
+
+Multi values can be represented using collections.
 
 
+Blocking Sequences:
 
+package com.mycom.coroutines
 
+fun main() {
+    getValues().forEach { value -> println(value) }
+}
 
+fun getValues(): Sequence<Int> = sequence {
+    for (i in 1..10) {
+        Thread.sleep(500)
+        yield(i)
+    }
+}
 
+NonBlocking /async Sequence
+fun main() {
+    runBlocking {
+        getValues().forEach { value -> println(value) }
 
+    }
+}
 
+suspend fun getValues():List<Int> {
+   return  listOf(1,2,3,4,5)
+}
+Here the values are returned in one short...
 
+what if i want to stream these sequence - Flow...
 
+package com.mycom.coroutines
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
+//Blocking Sequence
+//fun main() {
+//    getValues().forEach { value -> println(value) }
+//}
+//
+//fun getValues(): Sequence<Int> = sequence {
+//    for (i in 1..10) {
+//        Thread.sleep(500)
+//        yield(i)
+//    }
+//}
 
+//sequnce in non blocking or async
+//fun main() {
+//    runBlocking {
+//        getValues().forEach { value -> println(value) }
+//
+//    }
+//}
+//
+//suspend fun getValues():List<Int> {
+//   return  listOf(1,2,3,4,5)
+//}
 
+//sequence in nonblocking or async with streaming - flow
+fun main() {
+   runBlocking {
+       getValues().collect {value -> println(value) }
+   }
 
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+suspend fun getValues(): Flow<Int> = flow {
+    for (i in 1..10) {
+        delay(500)
+        emit(i)
+    }
+}
 
 
 
